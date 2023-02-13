@@ -1,1 +1,6 @@
+server:
+  port: 14159
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
