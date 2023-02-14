@@ -1,15 +1,16 @@
 package run.antleg.sharp.routes;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import run.antleg.sharp.modules.user.UserHandler;
 import run.antleg.sharp.modules.user.command.CreateUserCommand;
+import run.antleg.sharp.modules.user.command.UpdateUserCommand;
 import run.antleg.sharp.modules.user.model.User;
+import run.antleg.sharp.modules.user.model.UserId;
 
 import java.util.Objects;
 
@@ -22,6 +23,15 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody @Valid CreateUserCommand cmd) {
         return handler.createUser(cmd);
+    }
+
+    @Operation(summary = "创建用户")
+    @PostMapping("/{userId}")
+    public User updateUser(
+            @Schema(type = "integer", example = "114514")
+            @PathVariable("userId") UserId userId,
+            @RequestBody @Valid UpdateUserCommand cmd) {
+        return handler.updateUser(userId, cmd);
     }
 
     private final UserHandler handler;
