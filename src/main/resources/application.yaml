@@ -1,6 +1,12 @@
 server:
   port: 14159
 
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sharp
+    username: scott
+    password: tiger
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
