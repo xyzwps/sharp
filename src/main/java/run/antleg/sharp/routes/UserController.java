@@ -13,7 +13,6 @@ import run.antleg.sharp.modules.user.model.UserId;
 
 import java.util.Objects;
 
-@SuppressWarnings("unused")
 @Tag(name = "用户信息")
 @RestController
 @RequestMapping("/api/users")
@@ -25,7 +24,7 @@ public class UserController {
         return handler.createUser(cmd);
     }
 
-    @Operation(summary = "创建用户")
+    @Operation(summary = "更新用户")
     @PostMapping("/{userId}")
     public User updateUser(
             @Schema(type = "integer", format = "int64", example = "114514")

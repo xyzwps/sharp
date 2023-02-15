@@ -1,2 +1,9 @@
 server:
   port: 14159
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude:

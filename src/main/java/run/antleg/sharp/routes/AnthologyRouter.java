@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.function.HandlerFunction;
 import org.springframework.web.servlet.function.RequestPredicate;
@@ -28,7 +30,6 @@ public class AnthologyRouter {
 
     private static final RequestPredicate ACCEPT_JSON = accept(APPLICATION_JSON);
 
-
     @Tag(name = "文集") // TODO: not working
     @RouterOperations({
             @RouterOperation(path = "/api/anthologies", method = RequestMethod.POST, consumes = "application/json", operation = @Operation(
@@ -41,12 +42,22 @@ public class AnthologyRouter {
     public RouterFunction<ServerResponse> anthologyRouterFunction(AnthologyHandlers anthologyHandlers) {
         return route()
                 .POST("/api/anthologies", ACCEPT_JSON, this.createAnthology(anthologyHandlers))
+                .onError(Throwable.class, HandleExceptions::handle)
                 .build();
     }
 
+
+    @Autowired
+    private Validator validator;
+
     private HandlerFunction<ServerResponse> createAnthology(AnthologyHandlers anthologyHandlers) {
         return (request) -> {
-            var cmd = request.body(CreateAnthologyCommand.class); // TODO: validate
+            var cmd = request.body(CreateAnthologyCommand.class);
+            var br = new DirectFieldBindingResult(cmd, cmd.getClass().getCanonicalName());
+            validator.validate(cmd, br);
+            if (br.hasErrors()) {
+                throw new BindException(br); // TODO: 太复杂了
+            }
             var anthology = anthologyHandlers.create(cmd);
             return ServerResponse.ok().contentType(APPLICATION_JSON).body(anthology);
         };
