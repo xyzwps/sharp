@@ -12,11 +12,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import run.antleg.sharp.config.jackson.SharpModule
 
-@SuppressWarnings('unused')
 @Configuration
 class Beans {
 
-    @SuppressWarnings('GrMethodMayBeStatic')
     @Bean
     OpenAPI openApi(OpenApiProperties properties,
                     @Value('${server.port}') Integer port) {
@@ -30,7 +28,6 @@ class Beans {
     }
 
 
-    @SuppressWarnings('GrMethodMayBeStatic')
     @Bean
     GlobalOpenApiCustomizer globalOpenApiCustomizer() {
         return { openApi ->
@@ -48,7 +45,6 @@ class Beans {
     }
 
 
-    @SuppressWarnings('GrMethodMayBeStatic')
     @Bean
     Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
         return { builder -> builder.modules(new SharpModule()) }
