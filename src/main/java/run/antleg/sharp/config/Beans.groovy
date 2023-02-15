@@ -1,5 +1,6 @@
 package run.antleg.sharp.config
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.media.StringSchema
@@ -47,6 +48,6 @@ class Beans {
 
     @Bean
     Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
-        return { builder -> builder.modules(new SharpModule()) }
+        return { builder -> builder.modules(new SharpModule(), new JavaTimeModule()) }
     }
 }

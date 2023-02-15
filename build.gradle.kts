@@ -32,6 +32,8 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
     implementation("org.apache.groovy:groovy")
+    implementation("com.github.f4b6a3:ulid-creator:5.1.0")
+
 
     compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
