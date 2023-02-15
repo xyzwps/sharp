@@ -1,5 +1,6 @@
 plugins {
 	java
+    groovy
 	id("org.springframework.boot") version "3.0.2"
 	id("io.spring.dependency-management") version "1.1.0"
 }
@@ -29,6 +30,8 @@ dependencies {
 //	implementation("org.springframework.session:spring-session-data-redis")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+
+    implementation("org.apache.groovy:groovy")
 
     compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
