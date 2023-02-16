@@ -19,7 +19,9 @@ repositories {
 	mavenCentral()
 }
 
-extra["testcontainersVersion"] = "1.17.6"
+object Versions  {
+    const val testContainers = "1.17.6"
+}
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -27,6 +29,13 @@ dependencies {
 //	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+//  Temporary explicit version to fix Thymeleaf bug
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE")
+    implementation("org.springframework.security:spring-security-test")
+
 //	implementation("org.springframework.session:spring-session-data-redis")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
@@ -46,7 +55,7 @@ dependencies {
 
 dependencyManagement {
 	imports {
-		mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainersVersion")}")
+		mavenBom("org.testcontainers:testcontainers-bom:${Versions.testContainers}")
 	}
 }
 
