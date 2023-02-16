@@ -7,3 +7,6 @@ management:
       exposure:
         include: "*"
         exclude:
+logging:
+  level:
+    org.springframework.security: DEBUG

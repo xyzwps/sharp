@@ -10,7 +10,7 @@ import org.hibernate.annotations.Type;
 import run.antleg.sharp.config.hibernate.UserIdUserType;
 
 
-@Entity
+@Entity(name = "User")
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,6 +21,9 @@ public class User {
     @Type(UserIdUserType.class)
     @Schema(type = "integer", example = "114514")
     private UserId id;
+
+    @Schema(example = "diona")
+    private String username;
 
     @Schema(example = "文渊")
     private String displayName;

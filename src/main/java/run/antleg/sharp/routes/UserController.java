@@ -6,8 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import run.antleg.sharp.modules.user.UserHandler;
-import run.antleg.sharp.modules.user.command.CreateUserCommand;
-import run.antleg.sharp.modules.user.command.UpdateUserCommand;
+import run.antleg.sharp.modules.user.command.UpsertUserCommand;
 import run.antleg.sharp.modules.user.model.User;
 import run.antleg.sharp.modules.user.model.UserId;
 
@@ -20,7 +19,7 @@ public class UserController {
 
     @Operation(summary = "创建用户")
     @PostMapping
-    public User createUser(@RequestBody @Valid CreateUserCommand cmd) {
+    public User createUser(@RequestBody @Valid UpsertUserCommand cmd) {
         return handler.createUser(cmd);
     }
 
@@ -29,7 +28,7 @@ public class UserController {
     public User updateUser(
             @Schema(type = "integer", format = "int64", example = "114514")
             @PathVariable("userId") UserId userId,
-            @RequestBody @Valid UpdateUserCommand cmd) {
+            @RequestBody @Valid UpsertUserCommand cmd) {
         return handler.updateUser(userId, cmd);
     }
 
