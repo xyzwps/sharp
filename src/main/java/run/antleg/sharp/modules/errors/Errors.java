@@ -12,7 +12,9 @@ public enum Errors {
     ANTHOLOGY_NOT_FOUND("找不到文集", NOT_FOUND),
 
     REQUEST_INVALID("请求错误", BAD_REQUEST),
-    REQUEST_UNAUTHORIZED("请求错误", UNAUTHORIZED),
+    REQUEST_UNAUTHORIZED("尚未登录", UNAUTHORIZED),
+
+    REQUEST_FORBIDDEN("未授权", FORBIDDEN),
     ;
 
     Errors(String message, HttpStatus status) {

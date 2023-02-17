@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import run.antleg.sharp.config.hibernate.UserIdUserType;
+import run.antleg.sharp.config.security.Roles;
 import run.antleg.sharp.modules.user.model.User;
 import run.antleg.sharp.modules.user.model.UserId;
 
@@ -37,7 +38,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(Roles.ROLE_USER));
     }
 
 

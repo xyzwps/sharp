@@ -1,8 +1,10 @@
 package run.antleg.sharp.routes
 
+import groovy.util.logging.Slf4j
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.data.util.Pair
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.AuthenticationServiceException
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -15,14 +17,13 @@ import run.antleg.sharp.util.Servlets
 
 import static run.antleg.sharp.modules.errors.Errors.*
 
+@Slf4j
 class HandleExceptions {
 
     static Pair<HttpStatus, ErrorBody> handle(Throwable t) {
+        log.error("Request Error", t)
         return switch (t) {
-            case MethodArgumentNotValidException, BindException, WebExchangeBindException -> Pair.of(
-                    REQUEST_INVALID.status,
-                    new ErrorBody(msg: t.getFieldErrors().first()?.getDefaultMessage() ?: "请求错误", code: REQUEST_INVALID.name())
-            )
+            case MethodArgumentNotValidException, BindException, WebExchangeBindException -> wrap(REQUEST_INVALID, t.getFieldErrors().first()?.getDefaultMessage() ?: "请求错误")
             case AppException -> wrap(t.error)
             case AuthenticationServiceException -> {
                 def cause = t.cause
@@ -30,6 +31,7 @@ class HandleExceptions {
             }
             case BadCredentialsException -> wrap(REQUEST_UNAUTHORIZED)
             case UsernameNotFoundException -> wrap(REQUEST_UNAUTHORIZED, USER_NOT_FOUND.message)
+            case AccessDeniedException -> wrap(REQUEST_FORBIDDEN)
             default -> Pair.of(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     new ErrorBody(msg: t.getMessage()) // TODO:
@@ -38,11 +40,11 @@ class HandleExceptions {
     }
 
     static Pair<HttpStatus, ErrorBody> wrap(Errors error) {
-        return Pair.of(error.status, new ErrorBody(msg: error.message, code: error.status))
+        return Pair.of(error.status, new ErrorBody(msg: error.message, code: error.name()))
     }
 
     static Pair<HttpStatus, ErrorBody> wrap(Errors error, String message) {
-        return Pair.of(error.status, new ErrorBody(msg: message, code: error.status))
+        return Pair.of(error.status, new ErrorBody(msg: message, code: error.name()))
     }
 
     static void write(Throwable t, HttpServletResponse response) {

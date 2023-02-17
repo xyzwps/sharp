@@ -53,7 +53,7 @@ public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcess
 
         var payload = this.obtainPayload(request);
 
-        var unauth = UsernamePasswordAuthenticationToken.unauthenticated(payload.getUsername(), payload.getUsername());
+        var unauth = UsernamePasswordAuthenticationToken.unauthenticated(payload.getUsername(), payload.getPassword());
         var details = this.authenticationDetailsSource.buildDetails(request);
         unauth.setDetails(details);
         return this.getAuthenticationManager().authenticate(unauth);
