@@ -7,9 +7,12 @@ import java.util.Objects;
 import static org.springframework.http.HttpStatus.*;
 
 public enum Errors {
+    USER_NOT_FOUND("用户不存在", NOT_FOUND),
+
     ANTHOLOGY_NOT_FOUND("找不到文集", NOT_FOUND),
 
-    INVALID_REQUEST("请求错误", BAD_REQUEST),
+    REQUEST_INVALID("请求错误", BAD_REQUEST),
+    REQUEST_UNAUTHORIZED("请求错误", UNAUTHORIZED),
     ;
 
     Errors(String message, HttpStatus status) {

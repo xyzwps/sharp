@@ -1,39 +1,53 @@
 package run.antleg.sharp.routes
 
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.data.util.Pair
 import org.springframework.http.HttpStatus
+import org.springframework.security.authentication.AuthenticationServiceException
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.validation.BindException
 import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.servlet.function.ServerRequest
-import org.springframework.web.servlet.function.ServerResponse
+import org.springframework.web.bind.support.WebExchangeBindException
 import run.antleg.sharp.modules.errors.AppException
+import run.antleg.sharp.modules.errors.Errors
+import run.antleg.sharp.util.Servlets
 
-import static org.springframework.http.MediaType.APPLICATION_JSON
 import static run.antleg.sharp.modules.errors.Errors.*
 
 class HandleExceptions {
 
     static Pair<HttpStatus, ErrorBody> handle(Throwable t) {
         return switch (t) {
-            case MethodArgumentNotValidException, BindException -> Pair.of(
-                    INVALID_REQUEST.status,
-                    new ErrorBody(msg: t.getFieldErrors().first()?.getDefaultMessage() ?: "请求错误", code: INVALID_REQUEST.name())
+            case MethodArgumentNotValidException, BindException, WebExchangeBindException -> Pair.of(
+                    REQUEST_INVALID.status,
+                    new ErrorBody(msg: t.getFieldErrors().first()?.getDefaultMessage() ?: "请求错误", code: REQUEST_INVALID.name())
             )
-            case AppException -> Pair.of(
-                    t.errors.status,
-                    new ErrorBody(msg: t.errors.message, code: t.errors.name())
-            )
+            case AppException -> wrap(t.error)
+            case AuthenticationServiceException -> {
+                def cause = t.cause
+                (cause instanceof BindException) ? handle(cause) : wrap(REQUEST_UNAUTHORIZED)
+            }
+            case BadCredentialsException -> wrap(REQUEST_UNAUTHORIZED)
+            case UsernameNotFoundException -> wrap(REQUEST_UNAUTHORIZED, USER_NOT_FOUND.message)
             default -> Pair.of(
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    new ErrorBody(msg: t.getMessage())
+                    new ErrorBody(msg: t.getMessage()) // TODO:
             )
         }
     }
 
+    static Pair<HttpStatus, ErrorBody> wrap(Errors error) {
+        return Pair.of(error.status, new ErrorBody(msg: error.message, code: error.status))
+    }
 
-    static ServerResponse handle(Throwable t, ServerRequest request) {
+    static Pair<HttpStatus, ErrorBody> wrap(Errors error, String message) {
+        return Pair.of(error.status, new ErrorBody(msg: message, code: error.status))
+    }
+
+    static void write(Throwable t, HttpServletResponse response) {
         var pair = handle(t)
-        return ServerResponse.status(pair.first).contentType(APPLICATION_JSON).body(pair.second)
+        Servlets.sendJson(response, pair.first, pair.second)
     }
 
     static class ErrorBody {

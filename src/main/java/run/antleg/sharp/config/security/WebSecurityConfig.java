@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.validation.Validator;
+import run.antleg.sharp.modules.user.UserHandler;
 import run.antleg.sharp.util.JSON;
 
 import java.util.Map;
@@ -26,7 +28,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurityFilterChainBuilder,
-            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+            AuthenticationConfiguration authConfig,
+            UserHandler userHandler,
+            Validator validator
+    ) throws Exception {
 
         httpSecurityFilterChainBuilder
                 .authorizeHttpRequests((requests) -> requests
@@ -36,7 +41,8 @@ public class WebSecurityConfig {
                 )
                 .csrf(csrf -> csrf.disable())
                 .formLogin((form) -> form.disable())
-                .addFilterAt(new RestLoginAuthenticationFilter(JSON.OBJECT_MAPPER, authenticationConfiguration.getAuthenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new RestLoginAuthenticationFilter(userHandler, validator, authConfig.getAuthenticationManager()),
+                        UsernamePasswordAuthenticationFilter.class)
                 .logout((logout) -> logout.permitAll());
 
         var chain = httpSecurityFilterChainBuilder.build();
@@ -54,6 +60,7 @@ public class WebSecurityConfig {
                 "noop", NoOpPasswordEncoder.getInstance() // TODO: 换个正经的密码，要等有注册功能后才行
         ));
         provider.setPasswordEncoder(passwordEncoder);
+        provider.setHideUserNotFoundExceptions(false);
 
         return provider;
     }

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class AppException extends RuntimeException {
 
-    public final Errors errors;
+    public final Errors error;
 
     public final String description;
 
@@ -13,7 +13,7 @@ public class AppException extends RuntimeException {
     }
 
     public AppException(Errors errors, String description) {
-        this.errors = Objects.requireNonNull(errors);
+        this.error = Objects.requireNonNull(errors);
         this.description = description;
     }
 

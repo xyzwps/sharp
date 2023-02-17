@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import run.antleg.sharp.modules.user.command.UpsertUserCommand;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -18,6 +19,12 @@ public class UserService {
         cmd.updateUser(user);
         return userRepository.save(user);
     }
+
+
+    public Optional<User> findUserById(UserId id) {
+        return userRepository.findById(id);
+    }
+
 
     private final UserRepository userRepository;
 

@@ -23,8 +23,21 @@ public class UserController {
         return handler.createUser(cmd);
     }
 
+    @Operation(summary = "获取用户")
+    @GetMapping("/{userId}")
+    public User findUserById(@Schema(type = "integer", format = "int64", example = "114514")
+                           @PathVariable("userId") UserId userId) {
+        return handler.findUserById(userId);
+    }
+
+    @Operation(summary = "获取当前登录用户")
+    @GetMapping("/current")
+    public User findCurrentUser() {
+        throw new RuntimeException();
+    }
+
     @Operation(summary = "更新用户")
-    @PostMapping("/{userId}")
+    @PatchMapping("/{userId}")
     public User updateUser(
             @Schema(type = "integer", format = "int64", example = "114514")
             @PathVariable("userId") UserId userId,

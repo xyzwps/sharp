@@ -1,7 +1,5 @@
 package run.antleg.sharp.config.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -13,11 +11,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.validation.BindException;
+import org.springframework.validation.DirectFieldBindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.client.HttpClientErrorException;
+import run.antleg.sharp.modules.user.UserHandler;
+import run.antleg.sharp.modules.user.security.MyUserDetails;
+import run.antleg.sharp.routes.HandleExceptions;
+import run.antleg.sharp.util.JSON;
+import run.antleg.sharp.util.Servlets;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.Objects;
 
 /**
  * @see org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
@@ -27,56 +31,43 @@ public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcess
     private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER =
             new AntPathRequestMatcher("/api/login", "POST");
 
-    private final ObjectMapper objectMapper;
+    private final UserHandler userHandler;
 
-    public RestLoginAuthenticationFilter(ObjectMapper objectMapper, AuthenticationManager authenticationManager) {
+    private final Validator validator;
+
+    public RestLoginAuthenticationFilter(UserHandler userHandler,
+                                         Validator validator,
+                                         AuthenticationManager authenticationManager) {
         super(DEFAULT_ANT_PATH_REQUEST_MATCHER);
         super.setAuthenticationManager(authenticationManager);
-        this.objectMapper = Objects.requireNonNull(objectMapper);
+        super.setAuthenticationSuccessHandler(this::onAuthenticationSuccess);
+        super.setAuthenticationFailureHandler(this::onAuthenticationFailure);
+        this.userHandler = userHandler;
+        this.validator = validator;
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
         this.onlyAcceptPost(request);
         this.onlyAcceptJson(request);
 
         var payload = this.obtainPayload(request);
 
-        var authentication = UsernamePasswordAuthenticationToken.unauthenticated(payload.username, payload.password);
+        var unauth = UsernamePasswordAuthenticationToken.unauthenticated(payload.getUsername(), payload.getUsername());
         var details = this.authenticationDetailsSource.buildDetails(request);
-        authentication.setDetails(details);
-        return this.getAuthenticationManager().authenticate(authentication);
+        unauth.setDetails(details);
+        return this.getAuthenticationManager().authenticate(unauth);
     }
 
-    private LoginPayload obtainPayload(HttpServletRequest request) {
-        try {
-            return objectMapper.readValue(request.getInputStream(), LoginPayload.class);
-        } catch (IOException ex) {
-            throw new UncheckedIOException(ex);
+    private LoginPayload obtainPayload(HttpServletRequest request) throws IOException {
+        // TODO: 做更细致的检查
+        var payload = JSON.parse(request.getInputStream(), LoginPayload.class);
+        var br = new DirectFieldBindingResult(payload, payload.getClass().getCanonicalName());
+        validator.validate(payload, br);
+        if (br.hasErrors()) {
+            throw new AuthenticationServiceException("登录参数检查错误", new BindException(br));
         }
-    }
-
-    // TODO: 处理成功后的数据返回问题
-
-    public static class LoginPayload {
-        private String username;
-        private String password;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
+        return payload;
     }
 
     private void onlyAcceptPost(HttpServletRequest request) {
@@ -90,5 +81,19 @@ public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcess
         if (contentType == null || !contentType.toLowerCase().startsWith(MediaType.APPLICATION_JSON_VALUE)) {
             throw new HttpClientErrorException(HttpStatus.NOT_ACCEPTABLE);
         }
+    }
+
+    private void onAuthenticationSuccess(HttpServletRequest request,
+                                         HttpServletResponse response,
+                                         Authentication authentication) {
+        var userDetails = (MyUserDetails) authentication.getPrincipal();
+        var user = userHandler.findUserById(userDetails.getUserId());
+        Servlets.sendJson(response, HttpStatus.OK, user);
+    }
+
+    private void onAuthenticationFailure(HttpServletRequest request,
+                                         HttpServletResponse response,
+                                         AuthenticationException exception) {
+        HandleExceptions.write(exception, response);
     }
 }
