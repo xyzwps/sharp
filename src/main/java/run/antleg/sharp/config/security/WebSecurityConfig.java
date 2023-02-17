@@ -1,5 +1,6 @@
 package run.antleg.sharp.config.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,12 +19,16 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class WebSecurityConfig {
 
     @SuppressWarnings("Convert2MethodRef")
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        http
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity httpSecurityFilterChainBuilder,
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+
+        httpSecurityFilterChainBuilder
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home", "/api/login").permitAll()
                         .requestMatchers("/hello").authenticated()
@@ -34,9 +39,10 @@ public class WebSecurityConfig {
                 .addFilterAt(new RestLoginAuthenticationFilter(JSON.OBJECT_MAPPER, authenticationConfiguration.getAuthenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .logout((logout) -> logout.permitAll());
 
-        // TODO: log filter chain
-
-        return http.build();
+        var chain = httpSecurityFilterChainBuilder.build();
+        log.info("Chained Security filters are following:");
+        chain.getFilters().forEach(filter -> log.info("  ▶ {}", filter.getClass().getSimpleName()));
+        return chain;
     }
 
     @Bean
