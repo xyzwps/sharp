@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.function.*;
+import run.antleg.sharp.config.security.RestLoginAuthenticationFilter;
 import run.antleg.sharp.modules.OK;
 import run.antleg.sharp.modules.anthology.AnthologyHandlers;
 import run.antleg.sharp.modules.anthology.command.UpsertAnthologyCommand;
@@ -34,6 +35,12 @@ public class AnthologyRouter {
     private static final RequestPredicate ACCEPT_JSON = accept(APPLICATION_JSON);
 
     @RouterOperations({
+            @RouterOperation(path = "/api/login", method = RequestMethod.POST, consumes = "application/json", operation = @Operation(
+                    operationId = "login", summary = "登录", tags = "登录",
+                    requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = RestLoginAuthenticationFilter.LoginPayload.class))),
+                    responses = @ApiResponse(responseCode = "200", description = "创建成功", content = @Content(schema = @Schema(implementation = OK.class)))
+            )),
+            // ---- 以上是借宿 TODO: 找个合适的地方 ----
             @RouterOperation(path = "/api/anthologies", method = RequestMethod.POST, consumes = "application/json", operation = @Operation(
                     operationId = "create-anthology", summary = "创建文集", tags = "文集",
                     requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = UpsertAnthologyCommand.class))),

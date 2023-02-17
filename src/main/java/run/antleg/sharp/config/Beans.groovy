@@ -1,6 +1,6 @@
 package run.antleg.sharp.config
 
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.media.StringSchema
@@ -8,10 +8,9 @@ import io.swagger.v3.oas.models.parameters.HeaderParameter
 import io.swagger.v3.oas.models.servers.Server
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import run.antleg.sharp.config.jackson.SharpModule
+import run.antleg.sharp.util.JSON
 
 @Configuration
 class Beans {
@@ -47,7 +46,7 @@ class Beans {
 
 
     @Bean
-    Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
-        return { builder -> builder.modules(new SharpModule(), new JavaTimeModule()) }
+    ObjectMapper objectMapper() {
+        return JSON.OBJECT_MAPPER
     }
 }
