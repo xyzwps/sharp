@@ -3,9 +3,10 @@ package run.antleg.sharp.config.security;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.validation.Validator;
 import run.antleg.sharp.modules.user.UserHandler;
+import run.antleg.sharp.modules.user.security.MyUserDetailsService;
 
 import java.util.Map;
 
@@ -25,15 +27,27 @@ import java.util.Map;
 @Slf4j
 public class WebSecurityConfig {
 
+    @Bean
+    public AuthenticationManager authenticationManager(
+            HttpSecurity http,
+            MyUserDetailsService myUserDetailsService,
+            JwtAuthenticationProvider jwtAuthenticationProvider
+    ) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .authenticationProvider(jwtAuthenticationProvider)
+                .authenticationProvider(daoAuthenticationProvider(myUserDetailsService))
+                .build();
+    }
+
     @SuppressWarnings("Convert2MethodRef")
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurityFilterChainBuilder,
-            AuthenticationConfiguration authConfig,
             UserHandler userHandler,
-            Validator validator
+            Validator validator,
+            JwtService jwtService,
+            AuthenticationManager authenticationManager
     ) throws Exception {
-
         httpSecurityFilterChainBuilder
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home", "/api/login").permitAll()
@@ -42,8 +56,11 @@ public class WebSecurityConfig {
                 )
                 .csrf(csrf -> csrf.disable())
                 .formLogin((form) -> form.disable())
-                .addFilterAt(new RestLoginAuthenticationFilter(userHandler, validator, authConfig.getAuthenticationManager()),
+                .authenticationManager(authenticationManager)
+                .addFilterAt(new RestLoginAuthenticationFilter(userHandler, validator, jwtService, authenticationManager),
                         UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenAuthenticationFilter(authenticationManager),
+                        RestLoginAuthenticationFilter.class)
                 .logout((logout) -> logout.permitAll());
 
         var chain = httpSecurityFilterChainBuilder.build();
@@ -52,8 +69,7 @@ public class WebSecurityConfig {
         return chain;
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    private AuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
         var provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
 
@@ -65,4 +81,5 @@ public class WebSecurityConfig {
 
         return provider;
     }
+
 }

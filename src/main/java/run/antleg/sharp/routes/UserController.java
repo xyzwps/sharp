@@ -5,12 +5,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import run.antleg.sharp.config.security.Roles;
 import run.antleg.sharp.modules.user.UserHandler;
 import run.antleg.sharp.modules.user.command.UpsertUserCommand;
 import run.antleg.sharp.modules.user.model.User;
 import run.antleg.sharp.modules.user.model.UserId;
+import run.antleg.sharp.modules.user.security.MyUserDetails;
 
 import java.util.Objects;
 
@@ -35,8 +37,8 @@ public class UserController {
     @Operation(summary = "获取当前登录用户")
     @GetMapping("/current")
     @Secured(Roles.ROLE_USER)
-    public User findCurrentUser() {
-        throw new RuntimeException();
+    public User findCurrentUser(@AuthenticationPrincipal MyUserDetails myUserDetails) {
+        return myUserDetails.getUser();
     }
 
     @Operation(summary = "更新用户")

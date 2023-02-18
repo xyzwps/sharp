@@ -21,6 +21,7 @@ repositories {
 
 object Versions  {
     const val testContainers = "1.17.6"
+    const val jjwt = "0.11.5"
 }
 
 dependencies {
@@ -42,6 +43,10 @@ dependencies {
 
     implementation("org.apache.groovy:groovy")
     implementation("com.github.f4b6a3:ulid-creator:5.1.0")
+    implementation("io.vavr:vavr:0.10.4")
+    implementation("io.jsonwebtoken:jjwt-api:${Versions.jjwt}")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:${Versions.jjwt}")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Versions.jjwt}")
 
 
     compileOnly("org.projectlombok:lombok")

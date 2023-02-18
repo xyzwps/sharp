@@ -5,6 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import run.antleg.sharp.modules.user.model.UserId;
+
+import java.util.Optional;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -14,8 +17,11 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var userDetails = userDetailsRepository.findByUsername(username)
+        return userDetailsRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User " + username + " is not found."));
-        return userDetails;
+    }
+
+    public Optional<MyUserDetails> loadUserByUserId(UserId userId) throws UsernameNotFoundException {
+        return userDetailsRepository.findById(userId);
     }
 }

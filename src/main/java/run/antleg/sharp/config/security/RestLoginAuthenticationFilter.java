@@ -1,5 +1,6 @@
 package run.antleg.sharp.config.security;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.validation.BindException;
 import org.springframework.validation.DirectFieldBindingResult;
 import org.springframework.validation.Validator;
@@ -28,22 +28,23 @@ import java.io.IOException;
  */
 public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER =
-            new AntPathRequestMatcher("/api/login", "POST");
-
     private final UserHandler userHandler;
 
     private final Validator validator;
 
+    private final JwtService jwtService;
+
     public RestLoginAuthenticationFilter(UserHandler userHandler,
                                          Validator validator,
+                                         JwtService jwtService,
                                          AuthenticationManager authenticationManager) {
-        super(DEFAULT_ANT_PATH_REQUEST_MATCHER);
+        super(SecurityDicts.LOGIN_REQUEST_MATCHER);
         super.setAuthenticationManager(authenticationManager);
         super.setAuthenticationSuccessHandler(this::onAuthenticationSuccess);
         super.setAuthenticationFailureHandler(this::onAuthenticationFailure);
         this.userHandler = userHandler;
         this.validator = validator;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -88,6 +89,8 @@ public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcess
                                          Authentication authentication) {
         var userDetails = (MyUserDetails) authentication.getPrincipal();
         var user = userHandler.findUserById(userDetails.getUserId());
+        var cookie = new Cookie(SecurityDicts.JWT_COOKIE_NAME, jwtService.makeJwt(userDetails)); // TODO: 更多设置
+        response.addCookie(cookie);
         Servlets.sendJson(response, HttpStatus.OK, user);
     }
 
