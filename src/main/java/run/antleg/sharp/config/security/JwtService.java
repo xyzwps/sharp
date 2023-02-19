@@ -18,15 +18,13 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class JwtService {
-    // TODO: 移动到配置文件中
-    private static final String HS512KEY = "0nQEx2CO15Sv4+AfdkqH5nadsvty3PAil+IJ7p08h/2HXYj2pnW5j18DPSTjJqEit0zumIkF0Ll7xtVvWAweyQ==";
-
     private final SecretKey hs512Key;
 
     private final JwtParser parser;
 
-    public JwtService() {
-        this.hs512Key = Keys.hmacShaKeyFor(EncoderHelper.base64(HS512KEY));
+    public JwtService(JwtProperties jwtProperties) {
+        var hs512KeyString = jwtProperties.getHs512Key();
+        this.hs512Key = Keys.hmacShaKeyFor(EncoderHelper.base64(hs512KeyString));
         this.parser = Jwts.parserBuilder().setSigningKey(this.hs512Key).build();
     }
 
@@ -84,6 +82,7 @@ public class JwtService {
         }
     }
 
+    // 生成 hs512key
     public static void main(String[] args) {
         var key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         System.out.println(EncoderHelper.base64(key.getEncoded()));

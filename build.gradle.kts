@@ -67,3 +67,7 @@ dependencyManagement {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+//tasks.compileJava {
+//    options.compilerArgs.add("-parameters")
+//}

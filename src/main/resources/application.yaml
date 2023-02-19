@@ -10,3 +10,7 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+app:
+  jwt:
+    hs512Key: "0nQEx2CO15Sv4+AfdkqH5nadsvty3PAil+IJ7p08h/2HXYj2pnW5j18DPSTjJqEit0zumIkF0Ll7xtVvWAweyQ=="
