@@ -1,7 +1,10 @@
 package run.antleg.sharp.modules.user.security;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +22,9 @@ import java.util.Optional;
 @Entity(name = "MyUserDetails")
 @Data
 @Table(name = "user_details")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MyUserDetails implements UserDetails {
 
     @Id

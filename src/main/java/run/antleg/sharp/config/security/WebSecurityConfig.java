@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.validation.Validator;
@@ -31,11 +32,12 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(
             HttpSecurity http,
             MyUserDetailsService myUserDetailsService,
-            JwtAuthenticationProvider jwtAuthenticationProvider
+            JwtAuthenticationProvider jwtAuthenticationProvider,
+            PasswordEncoder passwordEncoder
     ) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .authenticationProvider(jwtAuthenticationProvider)
-                .authenticationProvider(daoAuthenticationProvider(myUserDetailsService))
+                .authenticationProvider(daoAuthenticationProvider(myUserDetailsService, passwordEncoder))
                 .build();
     }
 
@@ -69,17 +71,23 @@ public class WebSecurityConfig {
         return chain;
     }
 
-    private AuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
+    private AuthenticationProvider daoAuthenticationProvider(
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder
+    ) {
         var provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-
-        var passwordEncoder = new DelegatingPasswordEncoder("noop", Map.of(
-                "noop", NoOpPasswordEncoder.getInstance() // TODO: 换个正经的密码，要等有注册功能后才行
-        ));
         provider.setPasswordEncoder(passwordEncoder);
         provider.setHideUserNotFoundExceptions(false);
 
         return provider;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new DelegatingPasswordEncoder("noop", Map.of(
+                "noop", NoOpPasswordEncoder.getInstance() // TODO: 换个正经的密码，要等有注册功能后才行
+        ));
     }
 
 }

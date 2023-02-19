@@ -29,7 +29,7 @@ public class FnSecuritySecurityApis extends FnApis {
     public SpringdocRouteBuilder add(SpringdocRouteBuilder route) {
         return route
                 .POST("/api/login", ACCEPT_JSON, this::impossible, opts -> opts
-                        .operationId("login").summary("登录").tag("Auth")
+                        .operationId("login").summary("登录").tag("Action")
                         .requestBody(requestBodyBuilder()
                                 .content(contentBuilder()
                                         .mediaType(MediaType.APPLICATION_JSON_VALUE)
