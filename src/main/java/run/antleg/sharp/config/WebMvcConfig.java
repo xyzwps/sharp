@@ -9,6 +9,7 @@ import run.antleg.sharp.config.converter.StringToLongRecordConverter;
 import run.antleg.sharp.config.converter.StringToStringRecordConverter;
 import run.antleg.sharp.modules.anthology.model.AnthologyId;
 import run.antleg.sharp.modules.anthology.model.AuthorId;
+import run.antleg.sharp.modules.todo.model.TodoId;
 import run.antleg.sharp.modules.user.model.UserId;
 
 @Configuration
@@ -28,5 +29,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         new StringToLongRecordConverter<>(AuthorId.class, AuthorId::new).install(registry);
         new StringToStringRecordConverter<>(AnthologyId.class, AnthologyId::new).install(registry);
+
+        new StringToStringRecordConverter<>(TodoId.class, TodoId::new).install(registry);
     }
 }

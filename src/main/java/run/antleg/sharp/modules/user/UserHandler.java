@@ -18,7 +18,6 @@ public class UserHandler {
         return userService.findUserById(userId).orElseThrow(() -> new AppException(Errors.USER_NOT_FOUND));
     }
 
-
     @Transactional
     public User updateUser(UserId userId, UpsertUserCommand cmd) {
         return userService.updateUser(userId, cmd);

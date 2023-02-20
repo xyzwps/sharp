@@ -29,6 +29,7 @@ public class RegisterHandler {
         var user = userService.createUser(User.builder()
                 .username(username)
                 .displayName(username)
+                .registerTime(LocalDateTime.now())
                 .build());
 
         var userDetails = MyUserDetails.builder()
