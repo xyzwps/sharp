@@ -9,7 +9,6 @@ export type CreatePostData = {
 };
 
 export type UpdatePostData = {
-  id: number;
   title: string;
   content: string;
 };
@@ -40,8 +39,8 @@ export type RichPost = {
 export const createPost = (data: CreatePostData): Promise<{ postId: number }> =>
   request({ method: 'post', url: '/api/posts', json: data });
 
-export const updatePost = (data: UpdatePostData): Promise<{ postId: number }> =>
-  request({ method: 'put', url: '/api/posts', json: data });
+export const updatePost = (postId: number, data: UpdatePostData): Promise<{ postId: number }> =>
+  request({ method: 'patch', url: `/api/posts/${postId}`, json: data });
 
 export const getMyPosts = (): Promise<PostDto[]> => request({ method: 'get', url: '/api/posts' });
 

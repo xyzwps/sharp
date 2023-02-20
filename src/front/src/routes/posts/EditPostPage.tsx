@@ -2,20 +2,20 @@ import { Button } from '@mantine/core';
 import { useState } from 'react';
 import { Navigate, useLoaderData, useNavigate } from 'react-router-dom';
 
-import { PostWithContentDto, updatePost } from '../../apis/post';
+import { RichPost, updatePost } from '../../apis/post';
 import MarkdownEditor from '../../components/MarkdownEditor';
 import Unsupported from '../../components/Unsupported';
 import { toastError } from '../../error';
 import AuthHelper from '../common/AuthHelper';
 
 export default function EditPostPage() {
-  const post = useLoaderData() as PostWithContentDto;
+  const post = useLoaderData() as RichPost;
 
   return (
     <AuthHelper
       onAuth={(user) => {
         if (user.id != post.author?.id) {
-          return <Navigate to={`/posts/${post.post.id}`} />;
+          return <Navigate to={`/posts/${post.id}`} />;
         } else {
           switch (post.content.type) {
             case 'MD':
@@ -25,18 +25,18 @@ export default function EditPostPage() {
           }
         }
       }}
-      onUnauth={`/posts/${post.post.id}`}
+      onUnauth={`/posts/${post.id}`}
     />
   );
 }
 
-function MarkdownPostEditor({ post }: { post: PostWithContentDto }) {
+function MarkdownPostEditor({ post }: { post: RichPost }) {
   const navigate = useNavigate();
   const [content, setContent] = useState<string>(post.content.content);
-  const [title, setTitle] = useState<string>(post.post.title);
+  const [title, setTitle] = useState<string>(post.title);
 
   const handleSave = () => {
-    updatePost({ id: post.post.id, title, content })
+    updatePost(post.id, { title, content })
       .then((r) => navigate(`/posts/${r.postId}`))
       .catch((err) => toastError(err, '更新文章失败'));
   };
