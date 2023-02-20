@@ -17,6 +17,7 @@ public enum Errors {
     REQUEST_UNAUTHORIZED("尚未登录", UNAUTHORIZED),
 
     REQUEST_FORBIDDEN("未授权", FORBIDDEN),
+    UNHANDLED("未处理的错误", INTERNAL_SERVER_ERROR),
     ;
 
     Errors(String message, HttpStatus status) {

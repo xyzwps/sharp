@@ -32,10 +32,7 @@ class HandleExceptions {
             case BadCredentialsException -> wrap(REQUEST_UNAUTHORIZED)
             case UsernameNotFoundException -> wrap(REQUEST_UNAUTHORIZED, USER_NOT_FOUND.message)
             case AccessDeniedException -> wrap(REQUEST_FORBIDDEN)
-            default -> Pair.of(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    new ErrorBody(msg: t.getMessage()) // TODO:
-            )
+            default -> wrap(UNHANDLED) // TODO: i18n
         }
     }
 

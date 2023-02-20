@@ -14,13 +14,6 @@ import java.util.Objects;
 @Service
 public class UserHandler {
 
-    public User createUser(UpsertUserCommand cmd) {
-        // TODO: 做检查
-        var newUser = new User();
-        cmd.updateUser(newUser);
-        return userService.createUser(newUser);
-    }
-
     public User findUserById(UserId userId) {
         return userService.findUserById(userId).orElseThrow(() -> new AppException(Errors.USER_NOT_FOUND));
     }
