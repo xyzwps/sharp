@@ -1,4 +1,4 @@
-package run.antleg.sharp.routes;
+package run.antleg.sharp.modules.user;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,7 +8,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import run.antleg.sharp.config.security.Roles;
-import run.antleg.sharp.modules.user.UserHandler;
 import run.antleg.sharp.modules.user.command.UpsertUserCommand;
 import run.antleg.sharp.modules.user.model.User;
 import run.antleg.sharp.modules.user.model.UserId;

@@ -1,4 +1,4 @@
-package run.antleg.sharp.routes;
+package run.antleg.sharp.modules.todo;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -6,7 +6,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import run.antleg.sharp.modules.errors.AppException;
 import run.antleg.sharp.modules.errors.Errors;
-import run.antleg.sharp.modules.todo.TodoHandlers;
 import run.antleg.sharp.modules.todo.command.CreateTodoCommand;
 import run.antleg.sharp.modules.todo.command.PatchTodoCommand;
 import run.antleg.sharp.modules.todo.model.Todo;

@@ -9,6 +9,7 @@ import run.antleg.sharp.config.converter.StringToLongRecordConverter;
 import run.antleg.sharp.config.converter.StringToStringRecordConverter;
 import run.antleg.sharp.modules.anthology.model.AnthologyId;
 import run.antleg.sharp.modules.anthology.model.AuthorId;
+import run.antleg.sharp.modules.post.model.PostId;
 import run.antleg.sharp.modules.todo.model.TodoId;
 import run.antleg.sharp.modules.user.model.UserId;
 
@@ -19,7 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/home").setViewName("home");
         registry.addViewController("/").setViewName("home");
-        registry.addViewController("/hello").setViewName("hello");
+        registry.addViewController("/hello").setViewName("hello"); // TODO: 用不着了
         registry.addViewController("/login").setViewName("login");
     }
 
@@ -31,5 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         new StringToStringRecordConverter<>(AnthologyId.class, AnthologyId::new).install(registry);
 
         new StringToStringRecordConverter<>(TodoId.class, TodoId::new).install(registry);
+
+        new StringToLongRecordConverter<>(PostId.class, PostId::new).install(registry);
     }
 }

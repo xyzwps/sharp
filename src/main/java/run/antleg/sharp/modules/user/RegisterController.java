@@ -1,11 +1,10 @@
-package run.antleg.sharp.routes;
+package run.antleg.sharp.modules.user;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import run.antleg.sharp.modules.OK;
-import run.antleg.sharp.modules.user.RegisterHandler;
 import run.antleg.sharp.modules.user.command.NaiveRegisterCommand;
 
 import java.util.Objects;

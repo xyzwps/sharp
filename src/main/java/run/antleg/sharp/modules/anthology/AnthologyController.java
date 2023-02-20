@@ -1,11 +1,10 @@
-package run.antleg.sharp.routes;
+package run.antleg.sharp.modules.anthology;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import run.antleg.sharp.modules.OK;
-import run.antleg.sharp.modules.anthology.AnthologyHandlers;
 import run.antleg.sharp.modules.anthology.command.UpsertAnthologyCommand;
 import run.antleg.sharp.modules.anthology.model.Anthology;
 import run.antleg.sharp.modules.anthology.model.AnthologyId;
@@ -21,10 +20,10 @@ public class AnthologyController {
         return anthologyHandlers.create(cmd);
     }
 
-    @Operation(summary = "创建文集")
+    @Operation(summary = "更新文集")
     @PatchMapping("/{anthologyId}")
-    public Anthology update(@RequestBody @Valid UpsertAnthologyCommand cmd,
-                            @PathVariable("anthologyId") AnthologyId anthologyId) {
+    public Anthology patch(@RequestBody @Valid UpsertAnthologyCommand cmd,
+                           @PathVariable("anthologyId") AnthologyId anthologyId) {
         return anthologyHandlers.update(anthologyId, cmd);
     }
 
