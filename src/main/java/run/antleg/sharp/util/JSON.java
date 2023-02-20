@@ -1,6 +1,8 @@
 package run.antleg.sharp.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import run.antleg.sharp.config.jackson.SharpModule;
 
@@ -14,6 +16,8 @@ public class JSON {
 
     static {
         OBJECT_MAPPER.registerModules(new SharpModule(), new JavaTimeModule());
+        OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, true);
+        OBJECT_MAPPER.setDateFormat(StdDateFormat.getDateInstance()); // TODO: 写一个 thread-local 版本的 date format
     }
 
 

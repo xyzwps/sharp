@@ -21,6 +21,7 @@ import java.util.Objects;
 @RequestMapping("/api/users")
 public class UserController {
 
+    // TODO: 删减接口
     @Operation(summary = "创建用户")
     @PostMapping
     public User createUser(@RequestBody @Valid UpsertUserCommand cmd) {
