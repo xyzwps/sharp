@@ -4,7 +4,6 @@ import lombok.Data;
 import run.antleg.sharp.modules.post.model.Post;
 import run.antleg.sharp.modules.post.model.PostContent;
 import run.antleg.sharp.modules.post.model.PostId;
-import run.antleg.sharp.modules.user.model.User;
 import run.antleg.sharp.modules.user.model.UserSummary;
 
 import java.time.LocalDateTime;

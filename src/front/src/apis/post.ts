@@ -1,11 +1,11 @@
 import { request } from './http';
-import { UserDto } from './user';
+import { UserSummary } from './user';
 
 export type CreatePostData = {
   type: PostType;
   title: string;
   content: string;
-  idem: string
+  idem: string;
 };
 
 export type UpdatePostData = {
@@ -24,21 +24,26 @@ export type PostDto = {
 export type PostContentDto = {
   type: PostType;
   content: string;
+  createTime: string;
+  updateTime: string;
 };
 
-export type PostWithContentDto = {
-  post: PostDto;
+export type RichPost = {
+  id: number;
+  title: string;
+  createTime: string;
+  updateTime: string;
   content: PostContentDto;
-  author?: UserDto | null;
+  author?: UserSummary | null;
 };
 
-export const createPost = (data: CreatePostData): Promise<PostDto> =>
+export const createPost = (data: CreatePostData): Promise<{ postId: number }> =>
   request({ method: 'post', url: '/api/posts', json: data });
 
-export const updatePost = (data: UpdatePostData): Promise<PostDto> =>
+export const updatePost = (data: UpdatePostData): Promise<{ postId: number }> =>
   request({ method: 'put', url: '/api/posts', json: data });
 
 export const getMyPosts = (): Promise<PostDto[]> => request({ method: 'get', url: '/api/posts' });
 
-export const getSinglePost = (id: number): Promise<PostWithContentDto> =>
+export const getSinglePost = (id: number): Promise<RichPost> =>
   request({ method: 'get', url: `/api/posts/${id}` });

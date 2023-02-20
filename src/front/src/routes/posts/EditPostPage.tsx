@@ -37,7 +37,7 @@ function MarkdownPostEditor({ post }: { post: PostWithContentDto }) {
 
   const handleSave = () => {
     updatePost({ id: post.post.id, title, content })
-      .then((r) => navigate(`/posts/${r.id}`))
+      .then((r) => navigate(`/posts/${r.postId}`))
       .catch((err) => toastError(err, '更新文章失败'));
   };
 

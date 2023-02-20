@@ -2,8 +2,7 @@ import { Avatar, Card, Flex, Grid, Space, Text } from '@mantine/core';
 import { ReactNode } from 'react';
 import { Link, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 
-import { getSinglePost, PostContentDto, PostDto, PostWithContentDto } from '../../apis/post';
-import { UserDto } from '../../apis/user';
+import { getSinglePost, PostContentDto, RichPost } from '../../apis/post';
 import Unsupported from '../../components/Unsupported';
 import ReactMarkdown from '../../libs/markdown-render/ReactMarkdown';
 import AuthHelper from '../common/AuthHelper';
@@ -20,12 +19,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function SinglePostPage() {
-  const post = useLoaderData() as PostWithContentDto;
+  const post = useLoaderData() as RichPost;
 
   switch (post.content.type) {
     case 'MD':
       return (
-        <PostCommon post={post.post} author={post.author}>
+        <PostCommon post={post}>
           <MarkdownContent content={post.content} />
         </PostCommon>
       );
@@ -39,12 +38,12 @@ function MarkdownContent({ content }: { content: PostContentDto }) {
 }
 
 type PostCommonProps = {
-  post: PostDto;
+  post: RichPost;
   children?: ReactNode;
-  author?: UserDto | null;
 };
 
-function PostCommon({ post, children, author }: PostCommonProps) {
+function PostCommon({ post, children }: PostCommonProps) {
+  const { author } = post;
   return (
     <Grid>
       <Grid.Col sm={12} md={9} lg={8}>

@@ -34,7 +34,7 @@ function PostCreator() {
     }
 
     createPost({ type: 'MD', title, content, idem })
-      .then((post) => navigate(`/posts/${post.id}`))
+      .then(({ postId }) => navigate(`/posts/${postId}`))
       .catch((err) => toastError(err, '创建文章失败'));
   };
 

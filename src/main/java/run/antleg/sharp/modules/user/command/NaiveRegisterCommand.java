@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class NaiveRegisterCommand {
     @Schema(description = "用户名", example = "diona")
-    @NotNull(message = "Parameter username is required.")
+    @NotNull(message = "Parameter username is required.") // TODO: 限制可用字符
     @Size(max = 24)
     private String username;
 
