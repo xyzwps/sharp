@@ -2,7 +2,6 @@ package run.antleg.sharp.modules.user.model;
 
 import org.springframework.stereotype.Service;
 import run.antleg.sharp.modules.user.command.UpsertUserCommand;
-import run.antleg.sharp.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,12 +24,16 @@ public class UserService {
 
 
     public Optional<User> findUserById(UserId id) {
-        return userRepository.findById(id);
+        return userRepository.findById(id, User.class);
     }
 
-    public List<User> findUserByIds(Collection<UserId> userIds) {
+    public List<UserSummary> findUserSummaryByIds(Collection<UserId> userIds) {
         if (userIds == null || userIds.isEmpty()) return List.of();
-        return CollectionUtils.mutList(userRepository.findAllById(userIds));
+        return userRepository.findByIdIn(userIds, UserSummary.class);
+    }
+
+    public Optional<UserSummary> findUserSummaryById(UserId userId) {
+        return userRepository.findById(userId, UserSummary.class);
     }
 
     public Optional<User> findUserByUsername(String username) {

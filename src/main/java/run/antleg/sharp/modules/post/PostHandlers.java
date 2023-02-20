@@ -12,8 +12,8 @@ import run.antleg.sharp.modules.post.command.UpdatePostCommand;
 import run.antleg.sharp.modules.post.dto.RichPost;
 import run.antleg.sharp.modules.post.dto.RichPostSummary;
 import run.antleg.sharp.modules.post.model.*;
-import run.antleg.sharp.modules.user.model.User;
 import run.antleg.sharp.modules.user.model.UserService;
+import run.antleg.sharp.modules.user.model.UserSummary;
 import run.antleg.sharp.modules.user.security.MyUserDetails;
 
 import java.time.LocalDateTime;
@@ -30,8 +30,8 @@ public class PostHandlers {
     public List<RichPostSummary> getSummaries(MyUserDetails userDetails) {
         var summaries = postService.getPostSummariesByUserId(userDetails.getUserId());
         var userIds = summaries.stream().map(PostSummary::getUserId).collect(Collectors.toSet());
-        var users = userService.findUserByIds(userIds);
-        var userIdToUser = keyBy(users, User::getId);
+        var users = userService.findUserSummaryByIds(userIds);
+        var userIdToUser = keyBy(users, UserSummary::getId);
         return summaries.stream().map(it -> new RichPostSummary(it, userIdToUser.get(it.getUserId()))).toList();
     }
 
@@ -39,7 +39,7 @@ public class PostHandlers {
     public RichPost getById(MyUserDetails ignored, PostId postId) {
         var post = postService.findById(postId)
                 .orElseThrow(() -> new AppException(Errors.POST_NOT_FOUND));
-        var author = userService.findUserById(post.getUserId()).orElse(null);
+        var author = userService.findUserSummaryById(post.getUserId()).orElse(null);
         return new RichPost(post, author);
     }
 

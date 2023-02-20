@@ -4,6 +4,7 @@ import lombok.Data;
 import run.antleg.sharp.modules.post.model.PostId;
 import run.antleg.sharp.modules.post.model.PostSummary;
 import run.antleg.sharp.modules.user.model.User;
+import run.antleg.sharp.modules.user.model.UserSummary;
 
 import java.time.LocalDateTime;
 
@@ -15,9 +16,9 @@ public class RichPostSummary {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
-    private User author; // TODO: 这里用用户全部信息不大合适
+    private UserSummary author; // TODO: 这里用用户全部信息不大合适
 
-    public RichPostSummary(PostSummary summary, User author) {
+    public RichPostSummary(PostSummary summary, UserSummary author) {
         this.id = summary.getId();
         this.title = summary.getTitle();
         this.createTime = summary.getCreateTime();
