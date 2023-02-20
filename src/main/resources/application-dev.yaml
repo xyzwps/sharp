@@ -10,3 +10,9 @@ management:
 logging:
   level:
     org.springframework.security: DEBUG
+
+app:
+  openapi:
+    server:
+      url: http://localhost:14159
+      description: LocalDev

@@ -1,0 +1,1 @@
+export const SERVER_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSS';

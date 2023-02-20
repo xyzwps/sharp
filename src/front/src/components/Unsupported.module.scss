@@ -1,0 +1,19 @@
+.sxUnsupported {
+  display: flex;
+  height: calc(100vh - 100px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .sxUnsupportedTitle {
+    color: orange;
+    font-size: 24px;
+    padding: 16px 48px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .sxUnsupportedDesc {
+    margin-top: 24px;
+    color: #666;
+  }
+}
