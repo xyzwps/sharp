@@ -15,7 +15,7 @@ import java.util.Optional;
 public class TodoService {
 
     public Todo create(Todo todo) {
-        em.persist(todo);
+        em.persist(todo); // TODO: 尝试使用 jpa repository 来移除对 em 的使用
         return todoRepository.findById(todo.universeTodoId())
                 .orElseThrow(() -> new AppException(Errors.IMPOSSIBLE));
     }

@@ -15,6 +15,15 @@ public final class CollectionUtils {
         return list;
     }
 
+    @SafeVarargs
+    public static <E> HashSet<E> mutSet(Collection<E>... collections) {
+        var set = new HashSet<E>();
+        for (var c : collections) {
+            set.addAll(c);
+        }
+        return set;
+    }
+
     public static <K, E> Map<K, E> keyBy(Collection<E> c, Function<E, K> toKey) {
         var map = new HashMap<K, E>();
         c.forEach(it -> map.put(toKey.apply(it), it));

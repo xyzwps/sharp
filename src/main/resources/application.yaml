@@ -6,6 +6,8 @@ spring:
     url: jdbc:mysql://localhost:3306/sharp
     username: scott
     password: tiger
+  jpa:
+    show-sql: false
 
 springdoc:
   swagger-ui:

@@ -22,6 +22,7 @@ repositories {
 object Versions  {
     const val testContainers = "1.17.6"
     const val jjwt = "0.11.5"
+    const val lombok = "1.18.26"
 }
 
 dependencies {
@@ -49,10 +50,10 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Versions.jjwt}")
 
 
-    compileOnly("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok:${Versions.lombok}")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.mysql:mysql-connector-j")
-	annotationProcessor("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok:${Versions.lombok}")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")
 //	testImplementation("org.testcontainers:mysql")

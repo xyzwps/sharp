@@ -29,7 +29,7 @@ public class TagService {
     }
 
     public void save(Tagged tagged) {
-        this.em.persist(tagged);
+        this.taggedRepository.saveAndFlush(tagged);
     }
 
     public Tag createTag(String name) {

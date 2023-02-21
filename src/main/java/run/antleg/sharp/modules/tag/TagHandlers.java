@@ -1,5 +1,6 @@
 package run.antleg.sharp.modules.tag;
 
+import io.vavr.collection.Set;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static run.antleg.sharp.util.When.*;
+import static run.antleg.sharp.util.CollectionUtils.*;
 
 @Service
 public class TagHandlers {
@@ -49,9 +51,10 @@ public class TagHandlers {
 
         var addedTags = when(cmd.shouldAdd())
                 .then(() -> {
-                    var tags = tagService.find(cmd.getAdded());
-                    tagged.getTagIds().addAll(tags.stream().map(Tag::getId).toList());
-                    return tags;
+                    var addableTags = tagService.find(cmd.getAdded());
+                    var newTagIds = mutSet(addableTags.stream().map(Tag::getId).toList(), tagged.getTagIds());
+                    tagged.setTagIds(newTagIds);
+                    return addableTags;
                 })
                 .orElse(List.of());
 
