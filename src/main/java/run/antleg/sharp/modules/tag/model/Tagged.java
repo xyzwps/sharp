@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import run.antleg.sharp.config.hibernate.LongSetAttributeConverter;
 
 import java.util.Set;
 
@@ -20,6 +21,8 @@ public class Tagged {
     private TaggedType type;
     @Id
     private String id;
+
+    @Convert(converter = LongSetAttributeConverter.class)
     private Set<Long> tagIds;
 
     public UniverseTaggedId universeTaggedId() {
