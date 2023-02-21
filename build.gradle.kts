@@ -7,7 +7,7 @@ plugins {
 
 group = "run.antleg"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_19
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 configurations {
 	compileOnly {

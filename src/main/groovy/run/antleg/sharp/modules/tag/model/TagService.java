@@ -57,7 +57,7 @@ public class TagService {
                     var tagged = Tagged.builder()
                             .tagIds(tagIds).id(id.getId()).type(id.getType())
                             .build();
-                    em.persist(tagged);
+                    em.persist(tagged); // TODO: 改
                     return tagIds;
                 });
     }
