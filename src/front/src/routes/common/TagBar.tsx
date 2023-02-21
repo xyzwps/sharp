@@ -3,6 +3,7 @@ import { IconTags } from '@tabler/icons-react';
 import React from 'react';
 import { SimpleTagView, TaggedType, getResourceTags, searchTags, doTag, createTag } from '../../apis/tag';
 import { toastError } from '../../error';
+import _ from 'lodash';
 
 import AuthHelper from './AuthHelper';
 
@@ -119,8 +120,10 @@ class TagBar0 extends React.Component<TagBarProps & { authed: boolean }, TagBar0
             <TagSearch
               onSelect={(value) => {
                 this.setState({ showSearch: false });
-                doTag(type, id, [value.id])
-                  .then((tags) => this.setState({ tags }))
+                doTag(type, id, { added: [value.id] })
+                  .then((addedTags) => {
+                    this.setState({ tags: _.unionBy([...tags, ...addedTags], (it) => it.id) });
+                  })
                   .catch((err) => toastError(err, '打标签失败'));
               }}
             />
