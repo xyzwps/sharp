@@ -17,6 +17,8 @@ public enum Errors {
 
     POST_NOT_FOUND("找不到文章", NOT_FOUND),
 
+    TAGGED_TYPE_UNSUPPORTED("暂不支持的可打标签的资源", BAD_REQUEST),
+
     REQUEST_INVALID("请求错误", BAD_REQUEST),
     REQUEST_UNAUTHORIZED("尚未登录", UNAUTHORIZED),
 

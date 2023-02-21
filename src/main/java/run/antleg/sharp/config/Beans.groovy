@@ -35,7 +35,7 @@ class Beans {
             var commonHeader = new HeaderParameter()
                     .name("X-Request-Id")
                     .schema(new StringSchema())
-                    .description("请求 ID，用于在日志中追踪请求。你可以使用 UUID 等算法生成")
+                    .description("请求 ID，用于在日志中追踪请求。你可以使用 UUID 等算法生成") // TODO: 真的生成 request-id
                     .example("i-am-a-cool-id")
 
             openApi.paths.values().stream()
