@@ -56,7 +56,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok:${Versions.lombok}")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")
-//	testImplementation("org.testcontainers:mysql")
+	testImplementation("org.testcontainers:mysql")
 }
 
 dependencyManagement {

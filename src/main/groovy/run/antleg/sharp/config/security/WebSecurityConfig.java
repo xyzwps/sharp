@@ -51,11 +51,7 @@ public class WebSecurityConfig {
             AuthenticationManager authenticationManager
     ) throws Exception {
         httpSecurityFilterChainBuilder
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/api/login").permitAll()
-                        .requestMatchers("/hello").authenticated()
-                        .anyRequest().permitAll()
-                )
+                .authorizeHttpRequests((requests) -> requests.anyRequest().permitAll())
                 .csrf(csrf -> csrf.disable())
                 .formLogin((form) -> form.disable())
                 .authenticationManager(authenticationManager)

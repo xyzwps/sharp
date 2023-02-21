@@ -1,0 +1,13 @@
+server:
+  port: 41592
+
+spring:
+  datasource:
+    url: "${TC_MYSQL_URL}"
+    username: "${TC_MYSQL_USERNAME}"
+    password: "${TC_MYSQL_PASSWORD}"
+
+  sql:
+    init:
+      platform: mysql
+      mode: always

@@ -1,10 +1,12 @@
 package run.antleg.sharp.modules;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class OK {
     @Getter
-    private final boolean ok = true;
+    @Setter
+    private boolean ok = true;
 
     public static final OK INSTANCE = new OK();
 }
