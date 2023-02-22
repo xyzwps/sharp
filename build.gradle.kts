@@ -46,6 +46,7 @@ dependencies {
     implementation("org.apache.groovy:groovy")
     implementation("com.github.f4b6a3:ulid-creator:5.1.0")
     implementation("io.vavr:vavr:0.10.4")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
     implementation("io.jsonwebtoken:jjwt-api:${Versions.jjwt}")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:${Versions.jjwt}")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Versions.jjwt}")

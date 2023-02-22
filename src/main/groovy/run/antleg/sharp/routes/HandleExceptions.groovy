@@ -25,11 +25,8 @@ class HandleExceptions {
         return switch (t) {
             case MethodArgumentNotValidException, BindException, WebExchangeBindException -> wrap(REQUEST_INVALID, t.getFieldErrors().first()?.getDefaultMessage() ?: "请求错误")
             case AppException -> wrap(t.error)
-            case AuthenticationServiceException -> {
-                def cause = t.cause
-                (cause instanceof BindException) ? handle(cause) : wrap(REQUEST_UNAUTHORIZED)
-            }
-            case BadCredentialsException -> wrap(REQUEST_UNAUTHORIZED)
+            case AuthenticationServiceException -> wrap(REQUEST_UNAUTHORIZED)
+            case BadCredentialsException -> wrap(REQUEST_UNAUTHORIZED, t.getMessage())
             case UsernameNotFoundException -> wrap(REQUEST_UNAUTHORIZED, USER_NOT_FOUND.message)
             case AccessDeniedException -> wrap(REQUEST_FORBIDDEN)
             default -> wrap(UNHANDLED) // TODO: i18n

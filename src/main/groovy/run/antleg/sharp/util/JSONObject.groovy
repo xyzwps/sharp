@@ -13,7 +13,7 @@ class JSONObject extends HashMap<String, Object> {
         def value = this[key]
         if (value == null) return null
         if (value instanceof String) return value
-        throw new InvalidJSONValueException("Invalid bool value of property $key")
+        throw new InvalidJSONValueException("Invalid string value of property $key")
     }
 
 

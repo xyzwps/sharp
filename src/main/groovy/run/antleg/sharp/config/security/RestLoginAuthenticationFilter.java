@@ -97,6 +97,15 @@ public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcess
     private void onAuthenticationFailure(HttpServletRequest request,
                                          HttpServletResponse response,
                                          AuthenticationException exception) {
+        var cause = exception.getCause();
+        if (cause == null) {
+            HandleExceptions.write(exception, response);
+            return;
+        } else if (cause instanceof BindException ex) {
+            HandleExceptions.write(ex, response);
+            return;
+        }
+
         HandleExceptions.write(exception, response);
     }
 }
