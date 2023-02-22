@@ -37,3 +37,4 @@ These additional references should also help you:
 ### Other Dependencies
 
 - [SpringDoc V2](https://springdoc.org/v2/)
+- [Java Bean Validation](https://beanvalidation.org)

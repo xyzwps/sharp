@@ -9,7 +9,7 @@ import static org.springframework.http.HttpStatus.*;
 public enum Errors {
     USER_NOT_FOUND("用户不存在", NOT_FOUND),
 
-    USERNAME_CONFLICT("用户名已存在", NOT_FOUND),
+    USERNAME_CONFLICT("用户名已存在", BAD_REQUEST),
 
     ANTHOLOGY_NOT_FOUND("找不到文集", NOT_FOUND),
 

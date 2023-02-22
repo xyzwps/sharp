@@ -1,4 +1,4 @@
-package run.antleg.sharp.tc;
+package run.antleg.sharp.test.tc;
 
 import org.testcontainers.containers.MySQLContainer;
 
