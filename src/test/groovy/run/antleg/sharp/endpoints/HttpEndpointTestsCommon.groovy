@@ -4,19 +4,21 @@ import org.junit.ClassRule
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 import run.antleg.sharp.test.tc.Mysql
 import run.antleg.sharp.test.util.PasswordUtils
 import run.antleg.sharp.test.util.UsernameUtils
+import run.antleg.sharp.util.DateUtils
 import run.antleg.sharp.util.JSONObject
 
+import java.time.LocalDateTime
 import java.util.function.BiConsumer
-import java.util.function.Consumer
 
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.assertj.core.api.Assertions.*
+import static org.junit.jupiter.api.Assertions.*
 
 @ActiveProfiles("tc")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -52,5 +54,46 @@ class HttpEndpointTestsCommon {
         var api = "${serverPrefix}/api/register/naive"
         var body = [username: username, password: password]
         return this.restTemplate.postForEntity(api, body, JSONObject.class)
+    }
+
+    protected ResponseEntity<JSONObject> postRestLogin(String username, String password) {
+        var api = "${serverPrefix}/api/login"
+        def body = [username: username, password: password]
+        return this.restTemplate.postForEntity(api, body, JSONObject.class)
+    }
+
+    /**
+     * 其正确性由 {@link #naiveRegister} 和 {@link RestLoginControllerTests} 保证。
+     */
+    NaiveRegisterAndRestLoginResult naiveRegisterAndRestLogin() {
+        def result = new NaiveRegisterAndRestLoginResult()
+        naiveRegister { username, password ->
+            def resp = postRestLogin(username, password)
+            assertThat(resp.statusCode).isEqualTo(HttpStatus.OK)
+            def respBody = resp.body
+
+            assertThat(respBody.get("id"))
+                    .isNotNull()
+                    .isInstanceOf(Number)
+            result.userId = respBody.getLong("id")
+
+            assertThat(respBody.getString("username"))
+                    .isNotNull()
+                    .isEqualTo(username)
+            result.username = respBody.getString("username")
+
+            assertThat(respBody.getString("displayName"))
+                    .isNotNull()
+                    .isEqualTo(username)
+            result.displayName = respBody.getString("displayName")
+
+            assertThat(respBody.getString("registerTime"))
+                    .isNotNull()
+                    .matches(DateUtils.dateTimeFormatterPatternRegExp)
+                    .isLessThanOrEqualTo(LocalDateTime.now().format(DateUtils.dateTimeFormatter))
+
+            result.cookie = resp.getHeaders().getFirst(HttpHeaders.SET_COOKIE)
+        }
+        return result
     }
 }

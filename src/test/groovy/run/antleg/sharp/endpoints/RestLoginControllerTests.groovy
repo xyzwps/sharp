@@ -2,11 +2,9 @@ package run.antleg.sharp.endpoints
 
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import run.antleg.sharp.test.util.PasswordUtils
 import run.antleg.sharp.test.util.UsernameUtils
 import run.antleg.sharp.util.DateUtils
-import run.antleg.sharp.util.JSONObject
 
 import java.time.LocalDateTime
 
@@ -15,16 +13,10 @@ import static run.antleg.sharp.modules.Facts.*
 
 class RestLoginControllerTests extends HttpEndpointTestsCommon {
 
-    private ResponseEntity<JSONObject> postLogin(String username, String password) {
-        var api = "${serverPrefix}/api/login"
-        def body = [username: username, password: password]
-        return this.restTemplate.postForEntity(api, body, JSONObject.class)
-    }
-
     @Test
     void "login - ok"() {
         naiveRegister { username, password ->
-            def response = postLogin(username, password)
+            def response = postRestLogin(username, password)
             assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
             def respBody = response.body
             assertThat(respBody.get("id"))
@@ -48,7 +40,7 @@ class RestLoginControllerTests extends HttpEndpointTestsCommon {
         def username = UsernameUtils.randomUsername()
         def password = PasswordUtils.randomPassword()
 
-        def response = postLogin(username, password)
+        def response = postRestLogin(username, password)
         assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
         def respBody = response.body
         assertThat(respBody.get("code")).isNotNull().isEqualTo("REQUEST_UNAUTHORIZED")
@@ -58,7 +50,7 @@ class RestLoginControllerTests extends HttpEndpointTestsCommon {
     @Test
     void "login - password invalid"() {
         naiveRegister { username, password ->
-            def response = postLogin(username, password.reverse()/* use a wrong password */)
+            def response = postRestLogin(username, password.reverse()/* use a wrong password */)
             assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
             def respBody = response.body
             assertThat(respBody.get("code")).isNotNull().isEqualTo("REQUEST_UNAUTHORIZED")
@@ -71,7 +63,7 @@ class RestLoginControllerTests extends HttpEndpointTestsCommon {
         for (i in 1..<50) {
             def username = UsernameUtils.randomUsernameMayBeInvalid(i)
             def password = PasswordUtils.randomPassword()
-            def response = postLogin(username, password)
+            def response = postRestLogin(username, password)
             if (i < USERNAME_MIN_LEN || i > USERNAME_MAX_LEN) {
                 assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
                 def respBody = response.body
@@ -91,7 +83,7 @@ class RestLoginControllerTests extends HttpEndpointTestsCommon {
         for (i in 1..<50) {
             def username = UsernameUtils.randomUsername()
             def password = PasswordUtils.randomPasswordMayBeInvalid(i)
-            def response = postLogin(username, password)
+            def response = postRestLogin(username, password)
             if (i < PASSWORD_MIN_LEN || i > PASSWORD_MAX_LEN) {
                 assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
                 def respBody = response.body
