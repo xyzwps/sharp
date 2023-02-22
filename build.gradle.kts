@@ -1,6 +1,5 @@
 plugins {
 	java
-    groovy
 	id("org.springframework.boot") version "3.0.2"
 	id("io.spring.dependency-management") version "1.1.0"
     id("test-report-aggregation")
@@ -8,7 +7,7 @@ plugins {
 
 group = "run.antleg"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_19
 
 configurations {
 	compileOnly {
@@ -43,7 +42,6 @@ dependencies {
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
-    implementation("org.apache.groovy:groovy")
     implementation("com.github.f4b6a3:ulid-creator:5.1.0")
     implementation("io.vavr:vavr:0.10.4")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
@@ -53,9 +51,13 @@ dependencies {
 
 
     compileOnly("org.projectlombok:lombok:${Versions.lombok}")
+    testCompileOnly("org.projectlombok:lombok:${Versions.lombok}")
+    annotationProcessor("org.projectlombok:lombok:${Versions.lombok}")
+    testAnnotationProcessor("org.projectlombok:lombok:${Versions.lombok}")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.mysql:mysql-connector-j")
-	annotationProcessor("org.projectlombok:lombok:${Versions.lombok}")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
@@ -71,6 +73,15 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-//tasks.compileJava {
-//    options.compilerArgs.add("-parameters")
-//}
+tasks.withType<Test>().configureEach {
+    jvmArgs("--enable-preview")
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("--enable-preview")
+}
+
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs("--enable-preview")
+}
+
