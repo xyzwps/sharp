@@ -25,6 +25,16 @@ class UserControllerTests extends HttpEndpointTestsCommon {
         return this.restTemplate.exchange(api, HttpMethod.GET, request, JSONObject.class)
     }
 
+    private ResponseEntity<JSONObject> getUserById(Long userId, String cookie) {
+        var api = "${serverPrefix}/api/users/${userId}"
+        def headers = new HttpHeaders()
+        if (cookie) {
+            headers.set(HttpHeaders.COOKIE, cookie)
+        }
+        def request = new HttpEntity(headers)
+        return this.restTemplate.exchange(api, HttpMethod.GET, request, JSONObject.class)
+    }
+
     @Test
     void "current user info - unauthenticated"() {
         def response = getCurrentUser(null)
@@ -39,6 +49,51 @@ class UserControllerTests extends HttpEndpointTestsCommon {
         def result = naiveRegisterAndRestLogin()
 
         def response = getCurrentUser(result.cookie)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        def respBody = response.body
+        assertThat(respBody.get("id"))
+                .isNotNull()
+                .isEqualTo(result.userId)
+        assertThat(respBody.getString("username"))
+                .isNotNull()
+                .isEqualTo(result.username)
+        assertThat(respBody.getString("displayName"))
+                .isNotNull()
+                .isEqualTo(result.displayName)
+        assertThat(respBody.getString("registerTime"))
+                .isNotNull()
+                .matches(DateUtils.dateTimeFormatterPatternRegExp)
+                .isLessThanOrEqualTo(LocalDateTime.now().format(DateUtils.dateTimeFormatter))
+    }
+
+    @Test
+    void "get any user info - unauthenticated"() {
+        def result = naiveRegisterAndRestLogin()
+
+        def response = getUserById(result.userId, null)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        def respBody = response.body
+        assertThat(respBody.get("id"))
+                .isNotNull()
+                .isEqualTo(result.userId)
+        assertThat(respBody.getString("username"))
+                .isNotNull()
+                .isEqualTo(result.username)
+        assertThat(respBody.getString("displayName"))
+                .isNotNull()
+                .isEqualTo(result.displayName)
+        assertThat(respBody.getString("registerTime"))
+                .isNotNull()
+                .matches(DateUtils.dateTimeFormatterPatternRegExp)
+                .isLessThanOrEqualTo(LocalDateTime.now().format(DateUtils.dateTimeFormatter))
+    }
+
+    @Test
+    void "get any user info - authenticated"() {
+        def result = naiveRegisterAndRestLogin()
+        def result2 = naiveRegisterAndRestLogin()
+
+        def response = getUserById(result.userId, result2.cookie)
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         def respBody = response.body
         assertThat(respBody.get("id"))

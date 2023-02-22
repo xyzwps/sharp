@@ -1,7 +1,7 @@
 package run.antleg.sharp.modules.user.model;
 
 import org.springframework.stereotype.Service;
-import run.antleg.sharp.modules.user.command.UpsertUserCommand;
+import run.antleg.sharp.modules.user.command.PatchUserCommand;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +16,7 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public User updateUser(UserId userId, UpsertUserCommand cmd) {
+    public User updateUser(UserId userId, PatchUserCommand cmd) {
         var user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("用户不存在"));
         cmd.updateUser(user);
         return userRepository.save(user);

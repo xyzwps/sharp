@@ -15,7 +15,9 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.DirectFieldBindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.client.HttpClientErrorException;
-import run.antleg.sharp.modules.user.UserHandler;
+import run.antleg.sharp.modules.errors.AppException;
+import run.antleg.sharp.modules.errors.Errors;
+import run.antleg.sharp.modules.user.model.UserService;
 import run.antleg.sharp.modules.user.security.MyUserDetails;
 import run.antleg.sharp.routes.HandleExceptions;
 import run.antleg.sharp.util.JSON;
@@ -28,13 +30,12 @@ import java.io.IOException;
  */
 public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final UserHandler userHandler;
 
     private final Validator validator;
-
     private final JwtService jwtService;
+    private final UserService userService;
 
-    public RestLoginAuthenticationFilter(UserHandler userHandler,
+    public RestLoginAuthenticationFilter(UserService userService,
                                          Validator validator,
                                          JwtService jwtService,
                                          AuthenticationManager authenticationManager) {
@@ -42,9 +43,9 @@ public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcess
         super.setAuthenticationManager(authenticationManager);
         super.setAuthenticationSuccessHandler(this::onAuthenticationSuccess);
         super.setAuthenticationFailureHandler(this::onAuthenticationFailure);
-        this.userHandler = userHandler;
         this.validator = validator;
         this.jwtService = jwtService;
+        this.userService = userService;
     }
 
     @Override
@@ -88,7 +89,8 @@ public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcess
                                          HttpServletResponse response,
                                          Authentication authentication) {
         var userDetails = (MyUserDetails) authentication.getPrincipal();
-        var user = userHandler.findUserById(userDetails.getUserId());
+        var user = userService.findUserById(userDetails.getUserId())
+                .orElseThrow(() -> new AppException(Errors.IMPOSSIBLE));
         var cookie = new Cookie(SecurityDicts.JWT_COOKIE_NAME, jwtService.makeJwt(userDetails)); // TODO: 更多设置
         response.addCookie(cookie);
         Servlets.sendJson(response, HttpStatus.OK, user);

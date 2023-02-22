@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.validation.Validator;
-import run.antleg.sharp.modules.user.UserHandler;
+import run.antleg.sharp.modules.user.model.UserService;
 import run.antleg.sharp.modules.user.security.MyUserDetailsService;
 
 import java.util.Map;
@@ -45,7 +45,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurityFilterChainBuilder,
-            UserHandler userHandler,
+            UserService userService,
             Validator validator,
             JwtService jwtService,
             AuthenticationManager authenticationManager
@@ -55,7 +55,7 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .formLogin((form) -> form.disable())
                 .authenticationManager(authenticationManager)
-                .addFilterAt(new RestLoginAuthenticationFilter(userHandler, validator, jwtService, authenticationManager),
+                .addFilterAt(new RestLoginAuthenticationFilter(userService, validator, jwtService, authenticationManager),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new JwtTokenAuthenticationFilter(authenticationManager),
                         RestLoginAuthenticationFilter.class)
