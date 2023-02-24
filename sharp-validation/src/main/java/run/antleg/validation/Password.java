@@ -1,4 +1,4 @@
-package run.antleg.sharp.config.validation;
+package run.antleg.validation;
 
 
 import jakarta.validation.Constraint;

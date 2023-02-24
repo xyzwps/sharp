@@ -1,3 +1,2 @@
 rootProject.name = "sharp"
-include("src:test:untitled")
-findProject(":src:test:untitled")?.name = "untitled"
+include("sharp-validation")

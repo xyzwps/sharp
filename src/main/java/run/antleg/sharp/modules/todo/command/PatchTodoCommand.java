@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import run.antleg.sharp.config.validation.OneOfStrings;
 import run.antleg.sharp.modules.todo.model.TodoStatus;
+import run.antleg.validation.OneOfStrings;
 
 import static run.antleg.sharp.modules.Facts.TODO_DETAILS_MAX_LEN;
 

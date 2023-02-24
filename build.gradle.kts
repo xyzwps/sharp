@@ -49,6 +49,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:${Versions.jjwt}")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Versions.jjwt}")
 
+    implementation(project(":sharp-validation"))
 
     compileOnly("org.projectlombok:lombok:${Versions.lombok}")
     testCompileOnly("org.projectlombok:lombok:${Versions.lombok}")
