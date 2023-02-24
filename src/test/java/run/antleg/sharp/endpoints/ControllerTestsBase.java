@@ -1,7 +1,9 @@
 package run.antleg.sharp.endpoints;
 
+import io.restassured.RestAssured;
 import lombok.Data;
 import org.junit.ClassRule;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -24,17 +26,25 @@ import static run.antleg.sharp.util.CollectionUtils.*;
 
 @ActiveProfiles("tc")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class HttpEndpointTestsCommon {
+public class ControllerTestsBase {
 
     private static final int port = 41592;
 
-    static final String serverPrefix = "http://localhost:" + port;
+    private static final String baseUrl = "http://localhost";
+
+    static final String serverPrefix = baseUrl + ":" + port;
 
     @Autowired
     TestRestTemplate restTemplate;
 
     @ClassRule
     public static final Mysql mysql = Mysql.getInstance();
+
+    @BeforeAll
+    public static void setup() {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = port;
+    }
 
 
     /**

@@ -15,6 +15,10 @@ public final class CollectionUtils {
         return list;
     }
 
+    public static <E> ArrayList<E> mutList(E... elements) {
+        return new ArrayList<>(Arrays.asList(elements));
+    }
+
     public static <K, V> HashMap<K, V> mutMap() {
         return new HashMap<>();
     }
@@ -29,6 +33,14 @@ public final class CollectionUtils {
         var map = new HashMap<K, V>();
         map.put(k1, v1);
         map.put(k2, v2);
+        return map;
+    }
+
+    public static <K, V> HashMap<K, V> mutMap(K k1, V v1, K k2, V v2, K k3, V v3) {
+        var map = new HashMap<K, V>();
+        map.put(k1, v1);
+        map.put(k2, v2);
+        map.put(k3, v3);
         return map;
     }
 

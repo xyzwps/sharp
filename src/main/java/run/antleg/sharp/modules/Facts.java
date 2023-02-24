@@ -9,5 +9,9 @@ public final class Facts {
     public static final int PASSWORD_MAX_LEN = 32;
     public static final int PASSWORD_MIN_LEN = 8;
 
+    public static final int TODO_ID_MIN_LEN = 14;
+    public static final int TODO_ID_MAX_LEN = 36;
+    public static final int TODO_DETAILS_MAX_LEN = 120;
+
     public static final LocalDateTime FOREVER = LocalDateTime.of(2345, 12, 12, 0, 0, 0);
 }

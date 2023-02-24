@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 import run.antleg.sharp.modules.errors.AppException;
 import run.antleg.sharp.modules.errors.Errors;
+import run.antleg.sharp.modules.todo.command.PatchTodoCommand;
 import run.antleg.sharp.modules.user.model.User;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * FIXME: 没考虑有人创建几十万个 todo 的情况
+ */
 @Service
 public class TodoService {
 
@@ -20,13 +24,13 @@ public class TodoService {
                 .orElseThrow(() -> new AppException(Errors.IMPOSSIBLE));
     }
 
-    public Todo update(Todo todo) {
-        var oldTodo = todoRepository.findById(todo.universeTodoId())
+    public Todo update(UniverseTodoId todoId, PatchTodoCommand cmd) {
+        var todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new AppException(Errors.TODO_NOT_FOUND));
-        oldTodo.setDetails(todo.getDetails());
-        oldTodo.setStatus(todo.getStatus());
-        oldTodo.setUpdateTime(LocalDateTime.now());
-        return todoRepository.save(oldTodo);
+        todo.setDetails(cmd.getDetails());
+        todo.setStatus(cmd.status());
+        todo.setUpdateTime(LocalDateTime.now());
+        return todoRepository.save(todo);
     }
 
     public List<Todo> findByUser(User user) {

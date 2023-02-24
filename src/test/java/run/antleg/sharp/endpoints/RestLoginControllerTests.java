@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.*;
 import static run.antleg.sharp.modules.Facts.*;
 
-class RestLoginControllerTests extends HttpEndpointTestsCommon {
+class RestLoginControllerTests extends ControllerTestsBase {
 
     @Test
     void login__ok() {

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import static run.antleg.sharp.modules.Facts.*;
 
-class RegisterControllerTests extends HttpEndpointTestsCommon {
+class RegisterControllerTests extends ControllerTestsBase {
 
     @Test
     void naive_register__simple() {

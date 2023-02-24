@@ -17,9 +17,9 @@ CREATE TABLE `user_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `todo` (
-  `id`         varchar(24)   NOT NULL,
+  `id`          varchar(36)  NOT NULL,
   `user_id`     bigint(20)   NOT NULL,
-  `details`     varchar(100) NOT NULL,
+  `details`     varchar(120) NOT NULL,
   `status`      enum('TODO','IN_PROGRESS','DONE','DELETED') NOT NULL,
   `create_time` datetime(3)  NOT NULL,
   `update_time` datetime(3)  NOT NULL,

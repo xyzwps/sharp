@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.*;
 import static run.antleg.sharp.util.CollectionUtils.*;
 
-class UserControllerTests extends HttpEndpointTestsCommon {
+class UserControllerTests extends ControllerTestsBase {
 
     private ResponseEntity<JSONObject> getCurrentUser(String cookie) {
         var api = serverPrefix + "/api/users/current";

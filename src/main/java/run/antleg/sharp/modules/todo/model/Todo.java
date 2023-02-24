@@ -23,13 +23,17 @@ public class Todo {
     @Id
     @Type(TodoIdUserType.class)
     private TodoId id;
+
     @Id
     @Type(UserIdUserType.class)
     @JsonIgnore
     private UserId userId;
-    private String  details;
+
+    private String details;
+
     @Enumerated(EnumType.STRING)
     private TodoStatus status;
+
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 

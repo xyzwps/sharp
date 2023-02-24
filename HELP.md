@@ -33,8 +33,7 @@ These additional references should also help you:
 
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
 * [Spring Security Architecture](https://spring.io/guides/topicals/spring-security-architecture/)
-
-### Other Dependencies
-
-- [SpringDoc V2](https://springdoc.org/v2/)
-- [Java Bean Validation](https://beanvalidation.org)
+* [SpringDoc V2](https://springdoc.org/v2/)
+* [Java Bean Validation](https://beanvalidation.org)
+  - [Java Bean Validation Extension](https://github.com/nomemory/java-bean-validation-extension)
+* [A Guide to REST-assured](https://www.baeldung.com/rest-assured-tutorial)
