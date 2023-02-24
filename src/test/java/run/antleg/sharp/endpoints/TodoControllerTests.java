@@ -67,9 +67,9 @@ public class TodoControllerTests extends ControllerTestsBase {
         given().contentType(ContentType.JSON)
                 .body(mutMap("todoId", todoId, "details", "whatever", "status", "TODO"))
                 .when().post("/api/todos")
-                .then().statusCode(HttpStatus.FORBIDDEN.value())
-                .body("code", is("REQUEST_FORBIDDEN"))
-                .body("msg", is("未授权"));
+                .then().statusCode(HttpStatus.UNAUTHORIZED.value())
+                .body("code", is("REQUEST_UNAUTHORIZED"))
+                .body("msg", is("认证失败"));
     }
 
     @Test
@@ -198,17 +198,17 @@ public class TodoControllerTests extends ControllerTestsBase {
     public void $get_todos_$todoId___unauthenticated() {
         var todoId = generateTodoId();
         when().get("/api/todos/" + todoId)
-                .then().statusCode(HttpStatus.FORBIDDEN.value())
-                .body("code", is("REQUEST_FORBIDDEN"))
-                .body("msg", is("未授权"));
+                .then().statusCode(HttpStatus.UNAUTHORIZED.value())
+                .body("code", is("REQUEST_UNAUTHORIZED"))
+                .body("msg", is("认证失败"));
     }
 
     @Test
     public void $get_todos___unauthenticated() {
         when().get("/api/todos")
-                .then().statusCode(HttpStatus.FORBIDDEN.value())
-                .body("code", is("REQUEST_FORBIDDEN"))
-                .body("msg", is("未授权"));
+                .then().statusCode(HttpStatus.UNAUTHORIZED.value())
+                .body("code", is("REQUEST_UNAUTHORIZED"))
+                .body("msg", is("认证失败"));
     }
 
     @Test
@@ -217,9 +217,9 @@ public class TodoControllerTests extends ControllerTestsBase {
         given().contentType(ContentType.JSON)
                 .body(mutMap("details", "whatever", "status", "TODO"))
                 .when().patch("/api/todos/" + todoId)
-                .then().statusCode(HttpStatus.FORBIDDEN.value())
-                .body("code", is("REQUEST_FORBIDDEN"))
-                .body("msg", is("未授权"));
+                .then().statusCode(HttpStatus.UNAUTHORIZED.value())
+                .body("code", is("REQUEST_UNAUTHORIZED"))
+                .body("msg", is("认证失败"));
     }
 
     @Test

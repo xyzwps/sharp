@@ -4,10 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import run.antleg.sharp.config.security.Roles;
+import run.antleg.sharp.config.security.Authenticated;
 import run.antleg.sharp.modules.errors.AppException;
 import run.antleg.sharp.modules.errors.Errors;
 import run.antleg.sharp.modules.user.command.PatchUserCommand;
@@ -33,14 +32,14 @@ public class UserController {
 
     @Operation(summary = "获取当前登录用户")
     @GetMapping("/current")
-    @Secured(Roles.ROLE_USER)
+    @Authenticated
     public User findCurrentUser(@AuthenticationPrincipal MyUserDetails myUserDetails) {
         return myUserDetails.getUser();
     }
 
     @Operation(summary = "更新当前登录用户")
     @PatchMapping("/current")
-    @Secured(Roles.ROLE_USER)
+    @Authenticated
     public User updateUser(@AuthenticationPrincipal MyUserDetails myUserDetails,
                            @RequestBody @Valid PatchUserCommand cmd) {
         return userService.updateUser(myUserDetails.getUserId(), cmd);

@@ -50,11 +50,11 @@ class UserControllerTests extends ControllerTestsBase {
     @Test
     void current_user_info__unauthenticated() {
         var response = getCurrentUser(null);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         var respBody = response.getBody();
         assertThat(respBody).isNotNull();
-        assertThat(respBody.get("code")).isNotNull().isEqualTo("REQUEST_FORBIDDEN");
-        assertThat(respBody.get("msg")).isNotNull().isEqualTo("未授权");
+        assertThat(respBody.get("code")).isNotNull().isEqualTo("REQUEST_UNAUTHORIZED");
+        assertThat(respBody.get("msg")).isNotNull().isEqualTo("认证失败");
     }
 
     @Test
@@ -109,11 +109,11 @@ class UserControllerTests extends ControllerTestsBase {
     @Test
     void update_displayName__unauthenticated() {
         var response = updateUserDisplayName("刻晴", null);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         var respBody = response.getBody();
         assertThat(respBody).isNotNull();
-        assertThat(respBody.get("code")).isNotNull().isEqualTo("REQUEST_FORBIDDEN");
-        assertThat(respBody.get("msg")).isNotNull().isEqualTo("未授权");
+        assertThat(respBody.get("code")).isNotNull().isEqualTo("REQUEST_UNAUTHORIZED");
+        assertThat(respBody.get("msg")).isNotNull().isEqualTo("认证失败");
     }
 
     @Test
