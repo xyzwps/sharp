@@ -10,6 +10,7 @@ import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import run.antleg.sharp.modules.Facts;
 import run.antleg.sharp.util.JSON;
 
 import java.util.Optional;
@@ -37,9 +38,9 @@ public class Beans {
     public GlobalOpenApiCustomizer globalOpenApiCustomizer() {
         return (openApi) -> {
             var commonHeader = new HeaderParameter()
-                    .name("X-Request-Id")
+                    .name(Facts.HEADER_X_REQUEST_ID)
                     .schema(new StringSchema())
-                    .description("请求 ID，用于在日志中追踪请求。你可以使用 UUID 等算法生成") // TODO: 真的生成 request-id
+                    .description("请求 ID，用于在日志中追踪请求。你可以使用 UUID 等算法生成。缺省则自动生成") // TODO: 真的生成 request-id
                     .example("i-am-a-cool-id");
             openApi.getPaths().values().stream()
                     .flatMap(it -> it.readOperations().stream())

@@ -14,6 +14,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.support.WebExchangeBindException;
+import run.antleg.sharp.config.servlet.MDCFilter;
 import run.antleg.sharp.modules.errors.AppException;
 import run.antleg.sharp.modules.errors.Errors;
 import run.antleg.sharp.util.Servlets;
@@ -67,15 +68,16 @@ public class HandleExceptions {
     public static class ErrorBody {
         private final String msg;
         private final String code;
+        private final String requestId;
 
         public ErrorBody(Errors error, String msg) {
             this.code = error.name();
             this.msg = msg;
+            this.requestId = MDCFilter.getRequestId().orElse(null);
         }
 
         public ErrorBody(Errors error) {
-            this.code = error.name();
-            this.msg = error.message;
+            this(error, error.name());
         }
     }
 }
