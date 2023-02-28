@@ -71,13 +71,17 @@ public class HandleExceptions {
         private final String requestId;
 
         public ErrorBody(Errors error, String msg) {
-            this.code = error.name();
+            this(error.name(), msg);
+        }
+
+        private ErrorBody(String code, String msg) {
+            this.code = code;
             this.msg = msg;
             this.requestId = MDCFilter.getRequestId().orElse(null);
         }
 
         public ErrorBody(Errors error) {
-            this(error, error.name());
+            this(error.name(), error.message);
         }
     }
 }

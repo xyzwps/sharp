@@ -52,20 +52,20 @@ class RegisterControllerTests extends ControllerTestsBase {
     @Test
     void naive_register__check_username_length() {
         for (int i = 1; i < 50; i++) {
-        var response = postRegisterNaive(UsernameUtils.randomUsernameMayBeInvalid(i), PasswordUtils.randomPassword());
-        if (i > USERNAME_MAX_LEN) {
-            assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-            var respBody = response.getBody();
-            assertNotNull(respBody);
-            assertEquals(respBody.getString("code"), "REQUEST_INVALID");
-            assertEquals(respBody.getString("msg"), "用户名长度应在 1 到 24 个字符之间");
-        } else {
-            assertEquals(response.getStatusCode(), HttpStatus.OK);
-            var respBody = response.getBody();
-            assertNotNull(respBody);
-            assertTrue(respBody.getBoolean("ok"));
+            var response = postRegisterNaive(UsernameUtils.randomUsernameMayBeInvalid(i), PasswordUtils.randomPassword());
+            if (i > USERNAME_MAX_LEN) {
+                assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+                var respBody = response.getBody();
+                assertNotNull(respBody);
+                assertEquals(respBody.getString("code"), "REQUEST_INVALID");
+                assertEquals(respBody.getString("msg"), "用户名长度应在 1 到 24 个字符之间");
+            } else {
+                assertEquals(response.getStatusCode(), HttpStatus.OK);
+                var respBody = response.getBody();
+                assertNotNull(respBody);
+                assertTrue(respBody.getBoolean("ok"));
+            }
         }
-    }
     }
 
     @Test
