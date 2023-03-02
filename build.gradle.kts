@@ -1,8 +1,9 @@
 plugins {
 	java
+    jacoco
 	id("org.springframework.boot") version "3.0.2"
 	id("io.spring.dependency-management") version "1.1.0"
-    id("test-report-aggregation")
+//    id("test-report-aggregation")
 }
 
 group = "run.antleg"
@@ -42,7 +43,6 @@ dependencies {
 //	implementation("org.springframework.session:spring-session-data-redis")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
-
     implementation("com.github.f4b6a3:ulid-creator:5.1.0")
     implementation("io.vavr:vavr:0.10.4")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
@@ -59,6 +59,9 @@ dependencies {
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.mysql:mysql-connector-j")
+
+    testImplementation("io.projectreactor:reactor-core")
+    testImplementation("org.springframework:spring-webflux")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")

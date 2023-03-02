@@ -4,6 +4,7 @@ import com.github.f4b6a3.ulid.UlidCreator;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -23,7 +24,7 @@ public class MDCFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
-            insertIntoMDC(request);
+            insertIntoMDC(request, response);
             log.info("我嘞个去");
             chain.doFilter(request, response);
         } finally {
@@ -36,13 +37,17 @@ public class MDCFilter implements Filter {
         return Optional.ofNullable(MDC.get(MDC_REQUEST_ID_KEY)).filter(it -> !it.isBlank());
     }
 
-    private static void insertIntoMDC(ServletRequest request) {
+    private static void insertIntoMDC(ServletRequest request, ServletResponse response) {
         if (request instanceof HttpServletRequest req) {
             String reqId = req.getHeader(Facts.HEADER_X_REQUEST_ID);
             if (reqId == null || reqId.isBlank()) {
                 reqId = UlidCreator.getUlid().toString();
             }
             MDC.put(MDC_REQUEST_ID_KEY, reqId);
+
+            if (response instanceof HttpServletResponse resp) {
+                resp.setHeader(Facts.HEADER_X_REQUEST_ID, reqId);
+            }
         }
     }
 
