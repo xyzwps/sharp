@@ -1,9 +1,5 @@
 package run.antleg.sharp.test.util;
 
-
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Characters {
 
     public static final char[] HANS = {
