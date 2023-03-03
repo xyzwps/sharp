@@ -12,6 +12,9 @@ repositories {
 
 dependencies {
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+
+    testImplementation(platform("org.junit:junit-bom:5.9.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
 tasks.withType<Test> {
