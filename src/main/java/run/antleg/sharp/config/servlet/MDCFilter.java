@@ -5,7 +5,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.core.annotation.Order;
@@ -16,7 +15,6 @@ import java.util.Optional;
 
 @WebFilter
 @Order(SecurityProperties.DEFAULT_FILTER_ORDER + 10)
-@Slf4j
 public class MDCFilter implements Filter {
 
     public static final String MDC_REQUEST_ID_KEY = "requestId";
@@ -25,7 +23,6 @@ public class MDCFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
             insertIntoMDC(request, response);
-            log.info("我嘞个去");
             chain.doFilter(request, response);
         } finally {
             clearMDC();

@@ -1,4 +1,4 @@
-package run.antleg.sharp.endpoints;
+package run.antleg.sharp.demo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

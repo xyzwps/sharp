@@ -9,15 +9,15 @@ import run.antleg.sharp.modules.user.security.MyUserDetails;
 public final class SecurityUtils {
 
     public static MyUserDetails getPrincipal() {
-        var userDetails = (MyUserDetails) getAuthentication().getPrincipal();
-        if (userDetails == null) {
-            throw new AppException(Errors.REQUEST_UNAUTHORIZED);
-        }
-        return userDetails;
+        return switch (getAuthentication().getPrincipal()) {
+            case null -> throw new AppException(Errors.REQUEST_UNAUTHORIZED);
+            case MyUserDetails userDetails -> userDetails;
+            default -> throw new AppException(Errors.UNKNOWN_AUTHENTICATION);
+        };
     }
 
     public static Authentication getAuthentication() {
-        var authentication =  SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication();
+        var authentication = SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication();
         if (authentication == null) {
             throw new AppException(Errors.REQUEST_UNAUTHORIZED);
         }

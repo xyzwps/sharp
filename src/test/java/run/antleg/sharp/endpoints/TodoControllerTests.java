@@ -2,8 +2,6 @@ package run.antleg.sharp.endpoints;
 
 import com.github.f4b6a3.ulid.UlidCreator;
 import io.restassured.http.ContentType;
-import io.restassured.http.Header;
-import io.restassured.http.Headers;
 import lombok.Builder;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,6 @@ import run.antleg.sharp.modules.Facts;
 import run.antleg.sharp.util.DateUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 import static run.antleg.sharp.util.CollectionUtils.*;
 import static io.restassured.RestAssured.*;
@@ -329,12 +326,7 @@ public class TodoControllerTests extends ControllerTestsBase {
                 .body("updateTime", lessThanOrEqualTo(DateUtils.dateTimeNowString()));
     }
 
-    private static Headers cookieHeaders(String cookie) {
-        return Optional.ofNullable(cookie)
-                .filter(it -> !it.isBlank())
-                .map(it -> Headers.headers(new Header(HttpHeaders.COOKIE, cookie)))
-                .orElseGet(Headers::new);
-    }
+
 
     private void getTodoByIdOK(String cookie, String todoId, String details, String status) {
         given().headers(cookieHeaders(cookie))

@@ -2,6 +2,7 @@ package run.antleg.sharp.test.util;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 public class IntVector {
 
@@ -65,6 +66,10 @@ public class IntVector {
         } else {
             return new IntVector(this.boundary, newData);
         }
+    }
+
+    public IntStream stream() {
+        return Arrays.stream(this.data);
     }
 
     private void checkIndex(int index) {

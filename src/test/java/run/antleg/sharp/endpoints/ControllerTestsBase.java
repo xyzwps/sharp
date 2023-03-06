@@ -1,6 +1,8 @@
 package run.antleg.sharp.endpoints;
 
 import io.restassured.RestAssured;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import lombok.Data;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,6 +20,7 @@ import run.antleg.sharp.util.DateUtils;
 import run.antleg.sharp.util.JSONObject;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import static org.assertj.core.api.Assertions.*;
@@ -116,5 +119,13 @@ public class ControllerTestsBase {
             result.setCookie(resp.getHeaders().getFirst(HttpHeaders.SET_COOKIE));
         });
         return result;
+    }
+
+
+    protected static Headers cookieHeaders(String cookie) {
+        return Optional.ofNullable(cookie)
+                .filter(it -> !it.isBlank())
+                .map(it -> Headers.headers(new Header(HttpHeaders.COOKIE, cookie)))
+                .orElseGet(Headers::new);
     }
 }

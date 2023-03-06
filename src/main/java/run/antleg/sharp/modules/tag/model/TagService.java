@@ -1,7 +1,10 @@
 package run.antleg.sharp.modules.tag.model;
 
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import run.antleg.sharp.modules.errors.AppException;
+import run.antleg.sharp.modules.errors.Errors;
 import run.antleg.sharp.util.CollectionUtils;
 
 import java.time.LocalDateTime;
@@ -32,24 +35,25 @@ public class TagService {
         this.taggedRepository.saveAndFlush(tagged);
     }
 
+    @Transactional
     public Tag createTag(String name) {
-        // TODO: 处理名称冲突
-
-        var tag = Tag.builder()
+        var tag = tagRepository.findByName(name).orElseGet(() -> tagRepository.save(Tag.builder()
                 .name(name)
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .deleted(false)
-                .build();
-        return tagRepository.save(tag);
+                .build()));
+
+        if (tag.isDeleted()) {
+            throw new AppException(Errors.TAG_UNSUPPORTED);
+        }
+        return tag;
     }
 
     public Set<Long> appendTags(UniverseTaggedId id, Set<Long> tagIds) {
         if (tagIds == null || tagIds.isEmpty()) return Set.of();
 
         return taggedRepository.findById(id)
-
-
                 .map((tagged) -> {
                     tagged.getTagIds().addAll(tagIds);
                     taggedRepository.save(tagged);

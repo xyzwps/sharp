@@ -1,9 +1,9 @@
 package run.antleg.sharp.modules.tag;
 
-import io.vavr.collection.Set;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import run.antleg.sharp.config.security.Authenticated;
 import run.antleg.sharp.config.security.Roles;
 import run.antleg.sharp.modules.tag.command.CreateTagCommand;
 import run.antleg.sharp.modules.tag.command.DoTagCommand;
@@ -28,7 +28,7 @@ public class TagHandlers {
         return tagService.search(q.trim());
     }
 
-    @Secured(Roles.ROLE_USER)
+    @Authenticated
     @Transactional
     public Tag create(CreateTagCommand cmd) {
         var name = cmd.getName().trim();

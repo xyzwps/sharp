@@ -1,4 +1,4 @@
-package run.antleg.sharp.endpoints;
+package run.antleg.sharp.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package run.antleg.sharp.endpoints;
+package run.antleg.sharp.demo;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
