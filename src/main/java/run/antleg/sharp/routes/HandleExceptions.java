@@ -7,6 +7,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +36,7 @@ public class HandleExceptions {
             case WebExchangeBindException ex -> wrapFieldErrors(ex.getFieldErrors());
             /* Spring security Exceptions */
             case AuthenticationServiceException ignored -> wrap(REQUEST_UNAUTHORIZED);
+            case AuthenticationCredentialsNotFoundException ignored -> wrap(REQUEST_UNAUTHORIZED);
             case BadCredentialsException ex -> wrap(REQUEST_UNAUTHORIZED, ex.getMessage());
             case UsernameNotFoundException ignored -> wrap(REQUEST_UNAUTHORIZED, USER_NOT_FOUND.message);
             case AccessDeniedException ignored -> wrap(REQUEST_FORBIDDEN);
@@ -51,11 +53,11 @@ public class HandleExceptions {
         return wrap(REQUEST_INVALID, message);
     }
 
-    public static Pair<HttpStatus, ErrorBody> wrap(Errors error) {
+    private static Pair<HttpStatus, ErrorBody> wrap(Errors error) {
         return Pair.of(error.status, new ErrorBody(error));
     }
 
-    public static Pair<HttpStatus, ErrorBody> wrap(Errors error, String message) {
+    private static Pair<HttpStatus, ErrorBody> wrap(Errors error, String message) {
         return Pair.of(error.status, new ErrorBody(error, message));
     }
 

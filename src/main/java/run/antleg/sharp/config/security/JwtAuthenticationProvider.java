@@ -21,16 +21,19 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        var unauth = (JwtAuthenticationToken) authentication;
-        var jwt = unauth.getJwt();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            if (jwtAuth.isAuthenticated()) return jwtAuth;
 
-        var result = jwtService.verify(jwt);
-        if (result.isRight()) {
-            var userId = result.get();
-            var $userDetails = userDetailsService.loadUserByUserId(userId);
-            if ($userDetails.isEmpty()) return null;
-            var userDetails = $userDetails.get();
-            return JwtAuthenticationToken.authenticated(userDetails, userDetails.getAuthorities());
+            var jwt = jwtAuth.getJwt();
+            var result = jwtService.verify(jwt);
+            if (result.isRight()) {
+                var userId = result.get();
+                var $userDetails = userDetailsService.loadUserByUserId(userId);
+                if ($userDetails.isEmpty()) return null;
+                var userDetails = $userDetails.get();
+                return JwtAuthenticationToken.authenticated(userDetails, userDetails.getAuthorities());
+            }
+            return jwtAuth;
         }
         return null;
     }

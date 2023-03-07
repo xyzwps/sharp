@@ -54,8 +54,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests.anyRequest().permitAll())
                 .csrf(csrf -> csrf.disable())
                 .formLogin((form) -> form.disable())
-                .anonymous().disable()
                 .authenticationManager(authenticationManager)
+                .anonymous().disable()
                 .addFilterAt(new RestLoginAuthenticationFilter(userService, validator, jwtService, authenticationManager),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new JwtTokenAuthenticationFilter(authenticationManager),

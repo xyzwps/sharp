@@ -74,10 +74,10 @@ public class JwtService {
 
             return Either.right(UserId.from(sub));
         } catch (ExpiredJwtException ex) {
-            log.error("jwt is expired", ex);
+            log.error("jwt is expired: {}", ex.getMessage());
             return Either.left(JwtValidationResult.EXPIRED);
         } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException ex) {
-            log.error("jwt is invalid", ex);
+            log.error("jwt is invalid: {}", ex.getMessage());
             return Either.left(JwtValidationResult.INVALID_TOKEN);
         }
     }

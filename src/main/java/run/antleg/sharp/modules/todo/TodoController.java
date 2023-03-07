@@ -3,9 +3,10 @@ package run.antleg.sharp.modules.todo;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import run.antleg.sharp.config.security.Authenticated;
+import run.antleg.sharp.config.security.Roles;
 import run.antleg.sharp.modules.errors.AppException;
 import run.antleg.sharp.modules.errors.Errors;
 import run.antleg.sharp.modules.todo.command.CreateTodoCommand;
@@ -26,13 +27,13 @@ import java.util.Objects;
 public class TodoController {
 
     @GetMapping
-    @Authenticated
+    @Secured(Roles.ROLE_USER)
     public List<Todo> get(@AuthenticationPrincipal MyUserDetails userDetails) {
         return todoService.findByUser(userDetails.getUser());
     }
 
     @GetMapping("/{todoId}")
-    @Authenticated
+    @Secured(Roles.ROLE_USER)
     public Todo getById(@AuthenticationPrincipal MyUserDetails userDetails,
                         @PathVariable("todoId") TodoId todoId) {
         var uid = UniverseTodoId.builder()
@@ -44,7 +45,7 @@ public class TodoController {
     }
 
     @PostMapping
-    @Authenticated
+    @Secured(Roles.ROLE_USER)
     @Transactional
     public Todo create(@AuthenticationPrincipal MyUserDetails userDetails,
                        @RequestBody @Valid CreateTodoCommand cmd) {
@@ -59,7 +60,7 @@ public class TodoController {
     }
 
     @PatchMapping("/{todoId}")
-    @Authenticated
+    @Secured(Roles.ROLE_USER)
     @Transactional
     public Todo patch(@AuthenticationPrincipal MyUserDetails userDetails,
                       @PathVariable("todoId") TodoId todoId,

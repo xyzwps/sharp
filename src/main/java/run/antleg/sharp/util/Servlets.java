@@ -23,7 +23,6 @@ public class Servlets {
             var os = response.getOutputStream();
             JSON.OBJECT_MAPPER.writeValue(os, body);
             os.flush();
-            os.close();
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
         }

@@ -30,7 +30,6 @@ import java.io.IOException;
  */
 public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-
     private final Validator validator;
     private final JwtService jwtService;
     private final UserService userService;
