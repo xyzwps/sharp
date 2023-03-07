@@ -6,8 +6,4 @@ export type LoginData = {
 };
 
 export const login = (data: LoginData): Promise<UserDetails> =>
-  request({
-    method: 'post',
-    url: '/api/login',
-    json: data,
-  });
+  request({ method: 'post', url: '/api/login', json: data });
