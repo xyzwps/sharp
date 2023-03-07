@@ -91,6 +91,7 @@ public class RestLoginAuthenticationFilter extends AbstractAuthenticationProcess
         var user = userService.findUserById(userDetails.getUserId())
                 .orElseThrow(() -> new AppException(Errors.IMPOSSIBLE));
         var cookie = new Cookie(SecurityDicts.JWT_COOKIE_NAME, jwtService.makeJwt(userDetails)); // TODO: 更多设置
+        cookie.setPath(SecurityDicts.COOKIE_PATH);
         response.addCookie(cookie);
         Servlets.sendJson(response, HttpStatus.OK, user);
     }

@@ -3,6 +3,7 @@ package run.antleg.sharp.config.security;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.validation.Validator;
 import run.antleg.sharp.modules.user.model.UserService;
 import run.antleg.sharp.modules.user.security.MyUserDetailsService;
@@ -60,7 +63,11 @@ public class WebSecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new JwtTokenAuthenticationFilter(authenticationManager),
                         RestLoginAuthenticationFilter.class)
-                .logout((logout) -> logout.permitAll());
+                .logout(logout -> {
+                    logout.logoutRequestMatcher(SecurityDicts.LOGOUT_REQUEST_MATCHER);
+                    logout.addLogoutHandler(new CookieClearingLogoutHandler(SecurityDicts.COOKIES_TO_CLEAR));
+                    logout.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT));
+                });
 
         var chain = httpSecurityFilterChainBuilder.build();
         log.info("Chained Security filters are following:");
