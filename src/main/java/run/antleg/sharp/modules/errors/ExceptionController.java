@@ -1,4 +1,4 @@
-package run.antleg.sharp.routes;
+package run.antleg.sharp.modules.errors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

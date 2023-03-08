@@ -19,7 +19,7 @@ import run.antleg.sharp.modules.errors.AppException;
 import run.antleg.sharp.modules.errors.Errors;
 import run.antleg.sharp.modules.user.model.UserService;
 import run.antleg.sharp.modules.user.security.MyUserDetails;
-import run.antleg.sharp.routes.HandleExceptions;
+import run.antleg.sharp.modules.errors.HandleExceptions;
 import run.antleg.sharp.util.JSON;
 import run.antleg.sharp.util.Servlets;
 

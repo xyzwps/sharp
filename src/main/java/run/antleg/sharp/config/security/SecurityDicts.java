@@ -18,9 +18,13 @@ public final class SecurityDicts {
             cookieToClear(JWT_COOKIE_NAME, COOKIE_PATH)
     };
 
-    public static final AntPathRequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher("/api/login", "POST");
+    public static final String LOGIN_REQUEST_URL = "/api/login";
 
-    public static final AntPathRequestMatcher LOGOUT_REQUEST_MATCHER = new AntPathRequestMatcher("/api/logout", "POST");
+    public static final String LOGOUT_REQUEST_URL = "/api/logout";
+
+    public static final AntPathRequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher(LOGIN_REQUEST_URL, "POST");
+
+    public static final AntPathRequestMatcher LOGOUT_REQUEST_MATCHER = new AntPathRequestMatcher(LOGOUT_REQUEST_URL, "POST");
 
     public static final AntPathRequestMatcher ALL_API_REQUEST_MATCHER = new AntPathRequestMatcher("/api/**");
 
