@@ -40,7 +40,7 @@ public class Beans {
             var commonHeader = new HeaderParameter()
                     .name(Facts.HEADER_X_REQUEST_ID)
                     .schema(new StringSchema())
-                    .description("请求 ID，用于在日志中追踪请求。你可以使用 UUID 等算法生成。缺省则自动生成") // TODO: 真的生成 request-id
+                    .description("请求 ID，用于在日志中追踪请求。你可以使用 UUID 等算法生成。缺省则自动生成")
                     .example("i-am-a-cool-id");
             openApi.getPaths().values().stream()
                     .flatMap(it -> it.readOperations().stream())

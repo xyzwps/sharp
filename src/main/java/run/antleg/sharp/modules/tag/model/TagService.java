@@ -1,7 +1,6 @@
 package run.antleg.sharp.modules.tag.model;
 
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import run.antleg.sharp.modules.errors.AppException;
 import run.antleg.sharp.modules.errors.Errors;
@@ -35,7 +34,6 @@ public class TagService {
         this.taggedRepository.saveAndFlush(tagged);
     }
 
-    @Transactional
     public Tag createTag(String name) {
         var tag = tagRepository.findByName(name).orElseGet(() -> tagRepository.save(Tag.builder()
                 .name(name)
