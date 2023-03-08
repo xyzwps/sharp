@@ -1,18 +1,8 @@
-import { Button, Flex, Group, Header, Space } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
+import { Flex, Group, Header, Space } from '@mantine/core';
+import NavLink from './NavLink';
 
 import { useAuthStore } from '../../store/auth';
 import { useThemeStore } from '../../store/theme';
-
-type NavButtonProps = {
-  to: string;
-  children: React.ReactNode;
-};
-
-function NavButton({ to, children }: NavButtonProps) {
-  const navigate = useNavigate();
-  return <Button onClick={() => navigate(to)}>{children}</Button>;
-}
 
 export default function AppHeader() {
   const [userState, logout] = useAuthStore((state) => [state.status, state.logout]);
@@ -23,27 +13,28 @@ export default function AppHeader() {
       <Flex align="center" justify="space-between" h={56}>
         <Group spacing="xs">
           <Space w="xs" />
-          <NavButton to="/">Antleg.run</NavButton>
-          <NavButton to="/todos">Todo</NavButton>
-          <NavButton to="/a/create-post">Create A Post</NavButton>
-          <NavButton to="/demo/markdown">Markdown Demo</NavButton>
+          <NavLink to="/">Antleg.run</NavLink>
+          <NavLink to="/todos">Todo</NavLink>
+          <NavLink to="/a/create-post">Create A Post</NavLink>
+          <NavLink to="/demo/markdown">Markdown Demo</NavLink>
+          <NavLink to="/">ddd</NavLink>
         </Group>
         <Group spacing="xs">
-          <Button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>TH</Button>
+          <NavLink to={() => setTheme(theme === 'light' ? 'dark' : 'light')}>TH</NavLink>
           {(() => {
             switch (userState.state) {
               case 'auth':
                 return (
                   <>
-                    <NavButton to="/profile">个人信息</NavButton>
-                    <Button onClick={() => logout()}>退出登录</Button>
+                    <NavLink to="/profile">个人信息</NavLink>
+                    <NavLink to={() => logout()}>退出登录</NavLink>
                   </>
                 );
               case 'unauth':
                 return (
                   <>
-                    <NavButton to="/a/login">登录</NavButton>
-                    <NavButton to="/a/register">注册</NavButton>
+                    <NavLink to="/a/login">登录</NavLink>
+                    <NavLink to="/a/register">注册</NavLink>
                   </>
                 );
               default:
