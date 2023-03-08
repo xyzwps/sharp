@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import Entry from './routes';
 import { useAuthStore } from './store/auth';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import { useThemeStore } from './store/theme';

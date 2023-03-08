@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Button } from 'react-bootstrap';
 import { createPost } from '../../apis/post';
 import { useNavigate } from 'react-router-dom';
 import MarkdownEditor from '../../components/MarkdownEditor';
 import AuthHelper from '../common/AuthHelper';
-import { Flex, Loader } from '@mantine/core';
+import { Flex, Loader, Button } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { toastError } from '../../error';
 

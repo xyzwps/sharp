@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import { useState } from 'react';
 
-import Card from 'react-bootstrap/Card';
-import FormControl from 'react-bootstrap/FormControl';
+import { Card } from '@mantine/core';
 
 import { useTodoStore } from '../../store/todo';
 
@@ -19,8 +18,8 @@ function AddTodoFooter() {
   };
 
   return (
-    <Card.Footer style={{ padding: 3 }}>
-      <FormControl
+    <Card.Section style={{ padding: 2, marginBottom: -16 }}>
+      <input
         type="text"
         value={details}
         onChange={(e) => setDetails(e.target.value)}
@@ -32,9 +31,15 @@ function AddTodoFooter() {
           }
         }}
         placeholder="添加待办事项"
-        style={{ backgroundColor: 'transparent', border: 0 }}
+        style={{
+          backgroundColor: 'transparent',
+          border: 0,
+          padding: 8,
+          boxSizing: 'border-box',
+          width: '100%',
+        }}
       />
-    </Card.Footer>
+    </Card.Section>
   );
 }
 

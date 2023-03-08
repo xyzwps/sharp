@@ -3,10 +3,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 
-import ListGroup from 'react-bootstrap/ListGroup';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
+import { Card, SimpleGrid, Text } from '@mantine/core';
 
 import { useTodoStore } from '../../store/todo';
 import AddTodoFooter from './add-todo-footer';
@@ -43,13 +40,13 @@ function TodosView({ todos, status, title }: TodosViewProps) {
   );
 
   return (
-    <Card ref={drop} border={isOver ? 'info' : 'default'}>
-      <Card.Header>{title}</Card.Header>
-      <ListGroup variant="flush">
-        {filtered.map((it) => (
-          <TodoItem key={it.id} todo={it} />
-        ))}
-      </ListGroup>
+    <Card ref={drop} style={{ borderColor: isOver ? 'red' : 'black' }}>
+      <Card.Section withBorder style={{ padding: '8px 16px' }}>
+        <Text style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{title}</Text>
+      </Card.Section>
+      {filtered.map((it) => (
+        <TodoItem key={it.id} todo={it} />
+      ))}
       {status === 'TODO' && <AddTodoFooter />}
     </Card>
   );
@@ -69,17 +66,11 @@ function Todos() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Row>
-        <Col>
-          <TodosView todos={todos} status="TODO" title="待处理" />
-        </Col>
-        <Col>
-          <TodosView todos={todos} status="IN_PROGRESS" title="进行中" />
-        </Col>
-        <Col>
-          <TodosView todos={todos} status="DONE" title="已完成" />
-        </Col>
-      </Row>
+      <SimpleGrid cols={3}>
+        <TodosView todos={todos} status="TODO" title="待处理" />
+        <TodosView todos={todos} status="IN_PROGRESS" title="进行中" />
+        <TodosView todos={todos} status="DONE" title="已完成" />
+      </SimpleGrid>
     </DndProvider>
   );
 }

@@ -2,7 +2,7 @@ import { useDrag } from 'react-dnd';
 import { useState } from 'react';
 import _ from 'lodash';
 
-import ListGroup from 'react-bootstrap/ListGroup';
+import { Card } from '@mantine/core';
 
 import { useTodoStore } from '../../store/todo';
 import dayjs from 'dayjs';
@@ -41,7 +41,7 @@ function TodoItem({ todo }: TodoItemProps) {
   };
 
   return (
-    <ListGroup.Item ref={drag} style={{ cursor: isDragging ? 'grabbing' : undefined }}>
+    <Card.Section withBorder ref={drag} style={{ cursor: isDragging ? 'grabbing' : 'grab', padding: '8px 16px' }}>
       {editing ? (
         <input
           style={{ padding: '0px 4px', border: 0 }}
@@ -58,7 +58,7 @@ function TodoItem({ todo }: TodoItemProps) {
       ) : (
         <span onDoubleClick={() => setEditing(true)}>{todo.details}</span>
       )}
-    </ListGroup.Item>
+    </Card.Section>
   );
 }
 
