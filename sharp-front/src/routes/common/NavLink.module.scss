@@ -1,9 +1,13 @@
 .sx_nav_link {
-  padding: 16px;
+  padding: 18px;
   text-decoration: none;
 
   &:hover {
     background-color: whitesmoke;
     cursor: pointer;
   }
+}
+
+.sx_nav_link_active {
+  background-color: whitesmoke;
 }

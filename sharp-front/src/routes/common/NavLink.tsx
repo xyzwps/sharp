@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+import { Link, useLocation, useNavigation } from 'react-router-dom';
 import styles from './NavLink.module.scss';
 
 type OnCall = () => void;
@@ -9,16 +10,20 @@ type NavButtonProps = {
 };
 
 export default function NavLink({ to, children }: NavButtonProps) {
+  const location = useLocation();
+
+  const classes = classNames(styles.sx_nav_link, location.pathname == to && styles.sx_nav_link_active);
+
   if (typeof to == 'string') {
     return (
-      <Link className={styles.sx_nav_link} to={to}>
+      <Link className={classes} to={to}>
         {children}
       </Link>
     );
   } else {
     return (
       <a
-        className={styles.sx_nav_link}
+        className={classes}
         onClick={(e) => {
           e.preventDefault();
           to();
