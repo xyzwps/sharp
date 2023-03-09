@@ -14,7 +14,7 @@ type AuthStore = {
 };
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
-  status: { state: 'unauth' },
+  status: { state: 'loading' },
   login: async (data: LoginData) => {
     if (get().status.state !== 'unauth') return;
 
