@@ -1,11 +1,11 @@
 import { Box, Card, Text, TextInput, PasswordInput, Space, Checkbox, Group, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Navigate, useNavigate } from 'react-router';
-import AuthHelper from './common/AuthHelper';
-import { rules, s } from './common/form-validator';
-import { register } from '../apis/register';
+import AuthHelper from '../common/AuthHelper';
+import { rules, s } from '../common/form-validator';
+import { register } from '../../apis/register';
 import { showNotification } from '@mantine/notifications';
-import { toastError } from '../error';
+import { toastError } from '../../error';
 
 export default function RegisterPage() {
   return <AuthHelper onAuth={() => <Navigate to="/profile" />} onUnauth={() => <RegisterForm />} />;

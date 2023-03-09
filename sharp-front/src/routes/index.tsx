@@ -4,7 +4,7 @@ import ErrorPage from '../error-page';
 import CommonShell from './CommonShell';
 import ProfilePage from './ProfilePage';
 import Todos from './todos';
-import SuspenseWrapper from './SuspenseWrapper';
+import SuspenseWrapper from './common/SuspenseWrapper';
 import SinglePostPage, { loader as singlePostLoader } from './posts/SinglePostPage';
 import EditPostPage from './posts/EditPostPage';
 import MarkdownDemo from './demo/markdown';
@@ -19,8 +19,8 @@ const router = createBrowserRouter([
     element: <CommonShell />,
     children: [
       { path: '', element: <HomePage /> },
-      { path: 'a/login', element: <SuspenseWrapper factory={() => import('./LoginPage')} /> },
-      { path: 'a/register', element: <SuspenseWrapper factory={() => import('./RegisterPage')} /> },
+      { path: 'a/login', element: <SuspenseWrapper factory={() => import('./misc/LoginPage')} /> },
+      { path: 'a/register', element: <SuspenseWrapper factory={() => import('./misc/RegisterPage')} /> },
       { path: 'profile', element: <ProfilePage />, errorElement: <ErrorPage /> },
       { path: 'todos', element: <Todos />, errorElement: <ErrorPage /> },
       { path: 'posts/:id', element: <SinglePostPage />, errorElement: <ErrorPage />, loader: singlePostLoader },

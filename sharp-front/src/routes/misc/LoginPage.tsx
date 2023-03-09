@@ -1,16 +1,31 @@
-import { TextInput, Checkbox, Button, Group, Box, Card, PasswordInput, Text, Space } from '@mantine/core';
+import {
+  TextInput,
+  Checkbox,
+  Button,
+  Group,
+  Box,
+  Card,
+  PasswordInput,
+  Text,
+  Space,
+  LoadingOverlay,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Navigate, redirect } from 'react-router-dom';
-import AuthHelper from './common/AuthHelper';
-import { useAuthStore } from '../store/auth';
-import { rules, s } from './common/form-validator';
-import { toastError } from '../error';
+import { useAuthStore } from '../../store/auth';
+import { rules, s } from '../common/form-validator';
+import { toastError } from '../../error';
 
 export default function LoginPage() {
-  return <AuthHelper onAuth={() => <Navigate to="/profile" />} onUnauth={() => <LoginForm />} />;
+  const authState = useAuthStore((state) => state.status);
+  const loading = authState.state === 'loading';
+  if (authState.state === 'auth') {
+    return <Navigate to="/profile" />;
+  }
+  return <LoginForm loading={loading} />;
 }
 
-function LoginForm() {
+function LoginForm({ loading }: { loading: boolean }) {
   const form = useForm({
     initialValues: {
       username: '',
@@ -44,7 +59,8 @@ function LoginForm() {
   });
 
   return (
-    <Box sx={{ maxWidth: 320 }} mx="auto">
+    <Box sx={{ maxWidth: 320 }} mx="auto" pos="relative">
+      <LoadingOverlay visible={loading} overlayBlur={2} />
       <Card withBorder>
         <Card.Section inheritPadding>
           <Text

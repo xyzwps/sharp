@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router';
 
 import { useAuthStore } from '../../store/auth';
-import { Loader } from '@mantine/core';
+import BlockLoader from './BlockLoader';
 
 type Props = {
   onAuth: (user: UserDetails) => JSX.Element;
@@ -27,7 +27,7 @@ export default function AuthHelper({ onAuth, onUnauth, onLoading }: Props) {
       if (onLoading) {
         return onLoading();
       } else {
-        return <Loader size="xl" variant="bars" />;
+        return <BlockLoader />;
       }
     }
     default:
